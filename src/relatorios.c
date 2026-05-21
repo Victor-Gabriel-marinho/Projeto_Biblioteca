@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main () {
+int rel () {
     printf("Teste");
     
     return 0;

@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main () {
+int alg () {
     printf("Teste");
     
     return 0;

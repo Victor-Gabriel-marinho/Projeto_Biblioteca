@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main () {
+int emp () {
     printf("Teste");
     
     return 0;

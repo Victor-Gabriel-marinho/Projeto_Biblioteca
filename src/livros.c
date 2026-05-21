@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main () {
+int book () {
     printf("Teste");
     
     return 0;
