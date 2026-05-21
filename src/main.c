@@ -4,20 +4,19 @@
 #include "../include/Users.h"
 #include "../include/interface.h"
 
-
 int main() {
     // Configura o console para aceitar acentos (UTF-8)
     SetConsoleOutputCP(65001);
     
     ocultarCursor();
 
-    // Matriz de strings em C para as opções
-    char opcoes[4][30] = {"Usuários", "Configuracoes", "Creditos", "Sair"};
-    int totalOpcoes = 4;
+    // Matriz de strings para as opções
+    char opcoes[5][30] = {"Usuários", "Livros", "empréstimos","relatórios","Sair"};
+    int totalOpcoes = 5;
     int posicaoAtual = 0;
     char tecla;
 
-    while (1) { // Em C, 1 significa 'true'
+    while (1) {
         // Desenha o menu
         gotoxy(0, 2);
         printf("=== MENU PRINCIPAL ===\n\n");
@@ -27,7 +26,6 @@ int main() {
                 // Destaca a opção selecionada
                 printf("-> [ %s ]\n", opcoes[i]);
             } else {
-                // Opções normais (espaços no final limpam resíduos de texto)
                 printf("     %s     \n", opcoes[i]);
             }
         }
@@ -56,11 +54,14 @@ int main() {
             if (posicaoAtual == 0) {
                 Users();
             } else if (posicaoAtual == 1) {
-                printf("Menu de Configuracoes Aberto.\n");
+                printf("Livros.\n");
             } else if (posicaoAtual == 2) {
-                printf("Desenvolvido puramente em C!\n");
+                printf("emprestimos\n");
             } else if (posicaoAtual == 3) {
-                printf("Saindo do programa. Ate logo!\n");
+                printf("relatorios\n");
+            }
+             else if (posicaoAtual == 4) {
+                printf("saindo do programa\n");
                 break;
             }
             system("cls");
