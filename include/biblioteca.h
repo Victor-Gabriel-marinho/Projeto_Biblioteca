@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include "./algoritmos.h"
 
 #define MAX_LIVROS 500
 #define MAX_USUARIOS 500
@@ -12,6 +13,7 @@
 #define MAX_STRING 100
 #define MAX_EMPRESTIMOS_USUARIO 3
 #define PRAZO_DEVOLUCAO 14
+
 
 typedef struct
 {
@@ -27,7 +29,7 @@ typedef struct
 
 typedef struct
 {
-    int matricula;
+    char matricula[MAX_MAT];
     char nome[MAX_STRING];
     char curso[MAX_STRING];
     int qtd_emprestimos_ativos;

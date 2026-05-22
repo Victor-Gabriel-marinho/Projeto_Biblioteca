@@ -1,22 +1,30 @@
 #include <stdio.h>
 #include <windows.h>
 #include <conio.h>
+#include <stdlib.h>
+#include <time.h>
 #include "../include/interface.h"
 #include "../include/Users.h"
 #include "../include/biblioteca.h"
+#include "../include/algoritmos.h"
 
 void AddUsers()
 {
+    srand(time(NULL));
     char tecla;
     Usuario novoAluno;
+    gerarID(novoAluno.matricula);
+    novoAluno.qtd_emprestimos_ativos = 0;
 
-    printf("=== ADICIONAR USUÁRIO ===\n");
+    printf("=== ADICIONAR USUÁRIO ===\n\n");
 
     mostrarCursor();
     printf("Digite o nome do usuário: ");
     fgets(novoAluno.nome, MAX_STRING, stdin);
+    fflush(stdin);
     printf("Digite o curso do usuário: ");
     fgets(novoAluno.curso, MAX_STRING, stdin);
+    fflush(stdin);
 
     while (1)
     {
@@ -28,6 +36,18 @@ void AddUsers()
         {
             system("cls");
             break;
+        } else if (tecla == 13) {
+            FILE *usuarios = fopen("..\\output\\usuarios.dat", "ab");
+
+            if (usuarios == NULL) {
+                printf("Erro ao abrir o arquivo");
+                return;
+            }
+            fwrite(&novoAluno, sizeof(Usuario), 1, usuarios);
+
+            fclose(usuarios);
+            printf("");
+
         }
 
         system("cls");
