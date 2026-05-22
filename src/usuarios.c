@@ -13,6 +13,8 @@ void AddUsers()
     srand(time(NULL));
     char tecla;
     Usuario novoAluno;
+
+    // Função de gerar matricula automaticamente
     gerarID(novoAluno.matricula);
     novoAluno.qtd_emprestimos_ativos = 0;
 
@@ -21,6 +23,7 @@ void AddUsers()
     mostrarCursor();
     printf("Digite o nome do usuário: ");
     fgets(novoAluno.nome, MAX_STRING, stdin);
+    // Impedindo que o fgets pegue o Enter que o usuários digitar
     novoAluno.nome[strcspn(novoAluno.nome, "\n")] = '\0';
     printf("Digite o curso do usuário: ");
     fgets(novoAluno.curso, MAX_STRING, stdin);
@@ -47,6 +50,7 @@ void AddUsers()
                 _getch();
                 return;
             }
+            // Inserindo novo usuário no arquivo 
             fwrite(&novoAluno, sizeof(Usuario), 1, usuarios);
             fclose(usuarios);
             printf("\nUsuário salvo com sucesso!\nPressione qualquer tecla para sair\n");
@@ -71,6 +75,7 @@ void listUsers()
     Usuario u;
     int i = 0;
 
+    // Percorrendo o arquivo de usuários
     while (fread(&u, sizeof(Usuario), 1, f) == 1)
     {
         printf("=== Usuário %d ===\n", i++);
@@ -85,19 +90,22 @@ void listUsers()
 
 void Users()
 {
-
+    // Criando opções da tela de gerenciamento de usuários
     char opcoes[5][30] = {"Adicionar Usuário", "Listar Usuários", "Remover Usuário", "Editar usuário", "Voltar"};
 
     while (1)
     {
+        // Função para criar interface
         int posicaoAtual = criarMenu("TELA DE USUÁRIOS", opcoes, 5);
 
         if (posicaoAtual == 0)
         {
+            // Função de adicionar usuários
             AddUsers();
         }
         else if (posicaoAtual == 1)
         {
+            // Função de listar usuários
             listUsers();
         }
         else if (posicaoAtual == 2)

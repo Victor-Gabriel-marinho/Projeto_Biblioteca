@@ -5,6 +5,7 @@
 #include <conio.h>
 #include "interface.h"
 
+// Definindo funções de usuários
 void Users();
 void AddUsers();
 void listUsers();

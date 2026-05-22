@@ -7,14 +7,15 @@
 int main()
 {
 
-    // Matriz de strings para as opções
-    char opcoes[5][30] = {"Usuários", "Livros", "empréstimos", "relatórios", "Sair"};
+    // Definindo as opções do Menu principal
+    char opcoes[6][30] = {"Gerenciar Usuários", "Gerenciar Livros", "Realizar Empréstimos", "Registrar devolução", "Relatórios" , "Sair"};
 
     while (1)
     {
 
-        int posicaoAtual = criarMenu("MENU PRINCIPAL", opcoes, 5);
+        int posicaoAtual = criarMenu("MENU PRINCIPAL", opcoes, 6);
 
+        // função para dar espaçamento
         gotoxy(0, 2);
 
         if (posicaoAtual == 0)
@@ -31,9 +32,13 @@ int main()
         }
         else if (posicaoAtual == 3)
         {
+            printf("Devolução\n");
+        }
+        else if (posicaoAtual == 3)
+        {
             printf("relatorios\n");
         }
-        else if (posicaoAtual == 4)
+        else if (posicaoAtual == 5)
         {
             printf("saindo do programa\n");
             break;

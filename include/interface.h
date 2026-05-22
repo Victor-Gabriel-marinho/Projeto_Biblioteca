@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Definindo funções para gerenciar interface
 void gotoxy(int x, int y);
 
 void ocultarCursor();

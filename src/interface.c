@@ -28,6 +28,7 @@ void mostrarCursor () {
     SetConsoleCursorInfo(consoleHandle, &info);
 }
 
+// Função para criar as interfaces de escolha
 int criarMenu(char *titulo, char opcoes[][30], int totalOpcoes)
 {
     // Configura o console para aceitar acentos (UTF-8)
@@ -36,7 +37,6 @@ int criarMenu(char *titulo, char opcoes[][30], int totalOpcoes)
     ocultarCursor();
     system("cls");
 
-    // Matriz de strings para as opções
     int posicaoAtual = 0;
     char tecla;
 
