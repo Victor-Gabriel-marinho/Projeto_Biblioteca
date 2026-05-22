@@ -7,5 +7,6 @@
 
 void Users();
 void AddUsers();
+void listUsers();
 
 #endif

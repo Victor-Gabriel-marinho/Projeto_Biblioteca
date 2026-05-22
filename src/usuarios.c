@@ -21,10 +21,10 @@ void AddUsers()
     mostrarCursor();
     printf("Digite o nome do usuário: ");
     fgets(novoAluno.nome, MAX_STRING, stdin);
-    fflush(stdin);
+    novoAluno.nome[strcspn(novoAluno.nome, "\n")] = '\0';
     printf("Digite o curso do usuário: ");
     fgets(novoAluno.curso, MAX_STRING, stdin);
-    fflush(stdin);
+    novoAluno.curso[strcspn(novoAluno.curso, "\n")] = '\0';
 
     while (1)
     {
@@ -36,28 +36,57 @@ void AddUsers()
         {
             system("cls");
             break;
-        } else if (tecla == 13) {
-            FILE *usuarios = fopen("..\\output\\usuarios.dat", "ab");
+        }
+        else if (tecla == 13)
+        {
+            FILE *usuarios = fopen("data\\usuarios.dat", "ab");
 
-            if (usuarios == NULL) {
+            if (usuarios == NULL)
+            {
                 printf("Erro ao abrir o arquivo");
+                _getch();
                 return;
             }
             fwrite(&novoAluno, sizeof(Usuario), 1, usuarios);
-
             fclose(usuarios);
-            printf("");
-
+            printf("\nUsuário salvo com sucesso!\nPressione qualquer tecla para sair\n");
+            _getch();
+            system("cls");
+            break;
         }
-
-        system("cls");
     }
+}
+
+void listUsers()
+{
+    FILE *f = fopen("data\\usuarios.dat", "rb");
+
+    if (f == NULL)
+    {
+        printf("Erro ao abrir o arquivo");
+        system("Pause");
+        return;
+    }
+
+    Usuario u;
+    int i = 0;
+
+    while (fread(&u, sizeof(Usuario), 1, f) == 1)
+    {
+        printf("=== Usuário %d ===\n", i++);
+        printf("Matrícula : %s\n", u.matricula);
+        printf("Nome      : %s\n", u.nome);
+        printf("Curso     : %s\n", u.curso);
+        printf("Empréstimos ativos: %d\n\n", u.qtd_emprestimos_ativos);
+    }
+    system("Pause");
+    fclose(f);
 }
 
 void Users()
 {
 
-    char opcoes[5][30] = {"Adicionar Usuário", "Remover Usuário", "Listar Usuários", "Editar usuário", "Voltar"};
+    char opcoes[5][30] = {"Adicionar Usuário", "Listar Usuários", "Remover Usuário", "Editar usuário", "Voltar"};
 
     while (1)
     {
@@ -69,11 +98,11 @@ void Users()
         }
         else if (posicaoAtual == 1)
         {
-            printf("Remover usuário.\n");
+            listUsers();
         }
         else if (posicaoAtual == 2)
         {
-            printf("Listar usuários \n");
+            printf("Remover usuário.\n");
         }
         else if (posicaoAtual == 3)
         {
