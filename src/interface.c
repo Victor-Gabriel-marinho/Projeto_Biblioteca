@@ -20,6 +20,14 @@ void ocultarCursor()
     SetConsoleCursorInfo(consoleHandle, &info);
 }
 
+void mostrarCursor () {
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_CURSOR_INFO info;
+    info.dwSize = 100;
+    info.bVisible = TRUE;
+    SetConsoleCursorInfo(consoleHandle, &info);
+}
+
 int criarMenu(char *titulo, char opcoes[][30], int totalOpcoes)
 {
     // Configura o console para aceitar acentos (UTF-8)

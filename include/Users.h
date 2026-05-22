@@ -6,5 +6,6 @@
 #include "interface.h"
 
 void Users();
+void AddUsers();
 
 #endif

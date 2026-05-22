@@ -8,6 +8,8 @@ void gotoxy(int x, int y);
 
 void ocultarCursor();
 
+void mostrarCursor();
+
 int criarMenu(char *titulo, char opcoes[][30], int totalOpcoes);
 
 #endif
