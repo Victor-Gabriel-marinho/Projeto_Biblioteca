@@ -1,14 +1,22 @@
 #include <stdio.h>
 #include <windows.h>
 #include <conio.h>
+#include <stdlib.h>
 #include "../include/Users.h"
 #include "../include/interface.h"
+#include "../include/biblioteca.h"
+#include "../include/emprestimos.h"
+#include "../include/relatorios.h"
+#include "../include/livros.h"
+#include "../include/persistencia.h"
+
+Banco db;
 
 int main()
 {
 
     // Definindo as opções do Menu principal
-    char opcoes[6][30] = {"Gerenciar Usuários", "Gerenciar Livros", "Realizar Empréstimos", "Registrar devolução", "Relatórios" , "Sair"};
+    char opcoes[6][30] = {"Gerenciar Usuários", "Gerenciar Livros", "Realizar Empréstimos", "Registrar devolução", "Relatórios", "Sair"};
 
     while (1)
     {
