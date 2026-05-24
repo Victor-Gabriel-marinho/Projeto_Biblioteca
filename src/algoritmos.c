@@ -12,7 +12,7 @@ void gerarID(char *buffer)
         buffer[i] = caracteres[rand() % (sizeof(caracteres) - 1)];
     }
 
-    buffer[MAX_MAT] = '\0';
+    buffer[MAX_MAT + 1] = '\0';
 }
 
 /*busca binaria para encontrar o livro pelo codigo,

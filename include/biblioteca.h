@@ -12,6 +12,7 @@
 #define MAX_STRING 100
 #define MAX_EMPRESTIMOS_USUARIO 3
 #define PRAZO_DEVOLUCAO 14
+#define MAX_MAT 7
 
 // struct dos livros
 typedef struct
@@ -29,7 +30,7 @@ typedef struct
 // struct dos usuarios
 typedef struct
 {
-    int matricula;
+    char matricula[MAX_MAT + 1];
     char nome[MAX_STRING];
     char curso[MAX_STRING];
     int qtd_emprestimos_ativos;

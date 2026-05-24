@@ -29,7 +29,7 @@ void mostrarCursor () {
 }
 
 // Função para criar as interfaces de escolha
-int criarMenu(char *titulo, char opcoes[][30], int totalOpcoes)
+int criarMenu(char *titulo, char opcoes[][30], int totalOpcoes) 
 {
     // Configura o console para aceitar acentos (UTF-8)
     SetConsoleOutputCP(65001);

@@ -19,7 +19,7 @@ int validacao_usuario(int qtd_usuario)
 { // função pra     checar se o usuario pode pegar mais um emprestimo, retorna 0 (false, não pode) ou retorna 1(true, pode)
 }
 
-int main()
+int emp()
 {
 
     int matricula_aluno; // variavel local da matricula do aluno na execucao atual
@@ -51,3 +51,5 @@ int main()
             }
         }
     }
+    return 0;
+}
