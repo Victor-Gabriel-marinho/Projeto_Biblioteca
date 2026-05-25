@@ -21,14 +21,26 @@ void AddUsers()
     printf("=== ADICIONAR USUÁRIO ===\n\n");
     mostrarCursor();
 
+    do {
+
     printf("Digite o nome do usuário: ");
     fgets(novoAluno.nome, MAX_STRING, stdin);
-    // Impedindo que o fgets pegue o Enter que o usuários digitar
-    novoAluno.nome[strcspn(novoAluno.nome, "\n")] = '\0';
+    novoAluno.nome[strcspn(novoAluno.nome, "\n")] = '\0'; // Impedindo que o fgets pegue o Enter que o usuários digitar
+    if (strlen(novoAluno.nome) == 0) {
+        printf("Nome inválido! Tente novamente.\n");
+    }
+    
+    } while (strlen(novoAluno.nome) == 0);
 
+   do {
     printf("Digite o curso do usuário: ");
     fgets(novoAluno.curso, MAX_STRING, stdin);
     novoAluno.curso[strcspn(novoAluno.curso, "\n")] = '\0';
+
+    if (strlen(novoAluno.curso) == 0)
+        printf("Curso inválido! Tente novamente.\n");
+
+} while (strlen(novoAluno.curso) == 0);
 
     while (1)
     {
@@ -94,6 +106,78 @@ void listUsers()
     fclose(f);
 }
 
+void BuscarPorNome(char nome[100])
+{
+    FILE *f = fopen("data\\usuarios.dat", "rb");
+    if (f == NULL)
+    {
+        printf("Erro ao abrir o arquivo\n");
+        _getch();
+        return;
+    }
+
+    Usuario u;
+    int encontrado = 0;
+    while (fread(&u, sizeof(Usuario), 1, f) == 1)
+    {
+        if (strcmp(nome, u.nome) == 0)
+        {
+            printf("=== Usuário ===\n");
+            printf("Matrícula : %s\n", u.matricula);
+            printf("Nome      : %s\n", u.nome);
+            printf("Curso     : %s\n", u.curso);
+            printf("Empréstimos ativos: %d\n\n", u.qtd_emprestimos_ativos);
+            encontrado = 1;
+        }
+        if (encontrado == 1)
+        {
+            printf("Digite qualquer tecla para voltar\n");
+            _getch();
+            break;
+        }
+    }
+    fclose(f);
+    if (encontrado != 1)
+        printf("O usuário %s não foi encontrado\n", nome);
+        _getch();
+}
+
+void BuscaPorMat(char matricula[7])
+{
+    FILE *f = fopen("data\\usuarios.dat", "rb");
+    if (f == NULL)
+    {
+        printf("Erro ao abrir o arquivo\n");
+        _getch();
+        return;
+    }
+
+    Usuario u;
+    int encontrado = 0;
+    while (fread(&u, sizeof(Usuario), 1, f) == 1)
+    {
+        if (strcmp(matricula, u.matricula) == 0)
+        {
+            printf("=== Usuário ===\n");
+            printf("Matrícula : %s\n", u.matricula);
+            printf("Nome      : %s\n", u.nome);
+            printf("Curso     : %s\n", u.curso);
+            printf("Empréstimos ativos: %d\n\n", u.qtd_emprestimos_ativos);
+            encontrado = 1;
+        }
+        if (encontrado == 1)
+        {
+            printf("Digite qualquer tecla para voltar\n");
+            _getch();
+            break;
+        }
+    }
+    fclose(f);
+    if (encontrado != 1)
+        printf("O usuário com a matrícula %s não foi encontrado\n", matricula);
+        _getch();
+}
+
 void BuscarUsuarios()
 {
     char opcoes[3][30] = {"Buscar por nome", "Buscar por matricula", "Voltar"};
@@ -110,79 +194,17 @@ void BuscarUsuarios()
             printf("Digite o nome do usuário: ");
             fgets(nome, 100, stdin);
             nome[strcspn(nome, "\n")] = '\0';
-
-            FILE *f = fopen("data\\usuarios.dat", "rb");
-            if (f == NULL)
-            {
-                printf("Erro ao abrir o arquivo\n");
-                _getch();
-                break;
-            }
-
-            Usuario u;
-            int encontrado = 0;
-            while (fread(&u, sizeof(Usuario), 1, f) == 1)
-            {
-                if (strcmp(nome, u.nome) == 0)
-                {
-                    printf("=== Usuário ===\n");
-                    printf("Matrícula : %s\n", u.matricula);
-                    printf("Nome      : %s\n", u.nome);
-                    printf("Curso     : %s\n", u.curso);
-                    printf("Empréstimos ativos: %d\n\n", u.qtd_emprestimos_ativos);
-                    encontrado = 1;
-                }
-                if (encontrado == 1)
-                {
-                    printf("Digite qualquer tecla para voltar\n");
-                    _getch();
-                    break;
-                }
-            }
-            fclose(f);
-            if (encontrado != 1)
-                printf("O usuário %s não foi encontrado\n", nome);
+            BuscarPorNome(nome);
         }
         else if (posicaoAtual == 1)
         {
             // Busca por matricula
-             mostrarCursor();
+            mostrarCursor();
             char matricula[100];
             printf("Digite o nome do usuário: ");
             fgets(matricula, 100, stdin);
             matricula[strcspn(matricula, "\n")] = '\0';
-
-            FILE *f = fopen("data\\usuarios.dat", "rb");
-            if (f == NULL)
-            {
-                printf("Erro ao abrir o arquivo\n");
-                _getch();
-                break;
-            }
-
-            Usuario u;
-            int encontrado = 0;
-            while (fread(&u, sizeof(Usuario), 1, f) == 1)
-            {
-                if (strcmp(matricula, u.matricula) == 0)
-                {
-                    printf("=== Usuário ===\n");
-                    printf("Matrícula : %s\n", u.matricula);
-                    printf("Nome      : %s\n", u.nome);
-                    printf("Curso     : %s\n", u.curso);
-                    printf("Empréstimos ativos: %d\n\n", u.qtd_emprestimos_ativos);
-                    encontrado = 1;
-                }
-                if (encontrado == 1)
-                {
-                    printf("Digite qualquer tecla para voltar\n");
-                    _getch();
-                    break;
-                }
-            }
-            fclose(f);
-            if (encontrado != 1)
-                printf("O usuário com a matrícula %s não foi encontrado\n", matricula);
+            BuscaPorMat(matricula);
         }
         else if (posicaoAtual == 2)
         {
@@ -214,6 +236,7 @@ void Users()
         }
         else if (posicaoAtual == 2)
         {
+            // Função de buscar usuarios por nome ou matricula
             BuscarUsuarios();
         }
         else if (posicaoAtual == 3)

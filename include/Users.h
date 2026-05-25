@@ -8,6 +8,9 @@
 // Definindo funções de usuários
 void Users();
 void AddUsers();
+void BuscarPorNome(char nome[100]);
+void BuscaPorMat(char matricula[7]);
+void BuscarUsuarios();
 void listUsers();
 
 #endif
