@@ -6,7 +6,7 @@
 #include <time.h>
 #include "./algoritmos.h"
 
-int validacao_codigo(int codigo_livro)
+int validacao_codigo(char codigo[8])
 { // função pra checar se o codigo enviado é válido, retorna 0 (false, não é valido) ou retorna 1(true, é valido)
 }
 int validacao_matricula(int matricula_aluno)
@@ -23,7 +23,7 @@ int emp()
 {
 
     int matricula_aluno; // variavel local da matricula do aluno na execucao atual
-    int codigo_livro;    // variavel local de codigo do livro
+    char codigo[8];      // variavel local de codigo do livro
     int qtd_disponivel;
     int qtd_usuario;
 
@@ -38,10 +38,10 @@ int emp()
             continue;
         }
         printf("Qual o codigo do livro? ");
-        scanf("%d", &codigo_livro);
+        scanf("%7s", codigo);
         while (1)
         { // While intermediario pra checar se o codigo escrito é válido, ele fica no loop ate que a função validacao seja verdadeira.
-            if (validacao_codigo(codigo_livro) == 0)
+            if (validacao_codigo(codigo) == 0)
             {
                 printf("Codigo de livro invalido! Digite um codigo válido de livro. \n");
             }

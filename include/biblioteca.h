@@ -17,7 +17,7 @@
 // struct dos livros
 typedef struct
 {
-    int codigo;
+    char codigo[8];
     char titulo[MAX_STRING];
     char autor[MAX_STRING];
     int ano;
@@ -41,7 +41,6 @@ typedef struct
 {
     int id;
     int matricula_usuario;
-    int codigo_livro;
     char data_retirada[11];
     char data_prevista[11];
     char data_devolucao[11];

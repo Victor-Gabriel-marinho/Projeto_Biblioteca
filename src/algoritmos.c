@@ -18,7 +18,7 @@ void gerarID(char *buffer)
 /*busca binaria para encontrar o livro pelo codigo,
 retorna o indice do livro no vetor ou -1 se não encontrado*/
 
-int busca_livro(int codigo)
+int busca_livro(char codigo[8])
 {
     /* ESQ é o inicio do vetor livros
     dir é o final desse vetor -1
@@ -33,7 +33,7 @@ int busca_livro(int codigo)
 
         /*Ele compara o codigo do livro no meio do intervalo com o código
         que está sendo buscado*/
-        if (db.livros[meio].codigo == codigo)
+        if (strcmp(db.livros[meio].codigo, codigo) == 0)
         {
 
             // encontrou o livro, retorna o índice
