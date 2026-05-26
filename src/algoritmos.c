@@ -56,4 +56,6 @@ int busca_livro(char codigo[8])
             dir = meio - 1;
         }
     }
+    // se o livro não for encontrado, retorna -1
+    return -1;
 }
