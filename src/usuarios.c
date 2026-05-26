@@ -21,26 +21,29 @@ void AddUsers()
     printf("=== ADICIONAR USUÁRIO ===\n\n");
     mostrarCursor();
 
-    do {
+    do
+    {
 
-    printf("Digite o nome do usuário: ");
-    fgets(novoAluno.nome, MAX_STRING, stdin);
-    novoAluno.nome[strcspn(novoAluno.nome, "\n")] = '\0'; // Impedindo que o fgets pegue o Enter que o usuários digitar
-    if (strlen(novoAluno.nome) == 0) {
-        printf("Nome inválido! Tente novamente.\n");
-    }
-    
+        printf("Digite o nome do usuário: ");
+        fgets(novoAluno.nome, MAX_STRING, stdin);
+        novoAluno.nome[strcspn(novoAluno.nome, "\n")] = '\0'; // Impedindo que o fgets pegue o Enter que o usuários digitar
+        if (strlen(novoAluno.nome) == 0)
+        {
+            printf("Nome inválido! Tente novamente.\n");
+        }
+
     } while (strlen(novoAluno.nome) == 0);
 
-   do {
-    printf("Digite o curso do usuário: ");
-    fgets(novoAluno.curso, MAX_STRING, stdin);
-    novoAluno.curso[strcspn(novoAluno.curso, "\n")] = '\0';
+    do
+    {
+        printf("Digite o curso do usuário: ");
+        fgets(novoAluno.curso, MAX_STRING, stdin);
+        novoAluno.curso[strcspn(novoAluno.curso, "\n")] = '\0';
 
-    if (strlen(novoAluno.curso) == 0)
-        printf("Curso inválido! Tente novamente.\n");
+        if (strlen(novoAluno.curso) == 0)
+            printf("Curso inválido! Tente novamente.\n");
 
-} while (strlen(novoAluno.curso) == 0);
+    } while (strlen(novoAluno.curso) == 0);
 
     while (1)
     {
@@ -106,6 +109,95 @@ void listUsers()
     fclose(f);
 }
 
+void RemoverUsuario()
+{
+    char mat[8];
+    char tecla;
+    int encontrado;
+    Usuario usuarioEncontrado;
+    Usuario temp;
+    mostrarCursor();
+
+    printf("=== REMOVER USUÁRIO ===\n\n");
+
+    printf("Digite a matrícula do usuário que deseja remover: ");
+    scanf("%s", mat);
+
+    FILE *a = fopen("data\\usuarios.dat", "rb");
+    if (a == NULL)
+    {
+        printf("Erro ao abrir o arquivo.\n");
+        return;
+    }
+
+    while (fread(&usuarioEncontrado, sizeof(Usuario), 1, a))
+    {
+        if (strcmp(usuarioEncontrado.matricula, mat) == 0)
+        {
+            encontrado = 1;
+            break;
+        }
+    }
+    fclose(a);
+
+    if (!encontrado)
+    {
+        printf("Usuário com matrícula '%s' não encontrado.\n", mat);
+        _getch();
+        return;
+    }
+
+    printf("\nUsuário encontrado:\n");
+    printf("Matrícula: %s\n", usuarioEncontrado.matricula);
+    printf("Nome: %s\n", usuarioEncontrado.nome);
+
+    printf("\nEsse é o usuário que você quer excluir?\n");
+    printf(" Enter     - Sim\n");
+    printf(" Backspace - Não\n");
+
+    tecla = _getch();
+    if (tecla == 8)
+    {
+
+        system("cls");
+        return;
+    }
+    else if (tecla != 13)
+    {
+        return;
+    }
+
+    FILE *original = fopen("data\\usuarios.dat", "rb");
+    FILE *temporario = fopen("data\\usuarios_temp.dat", "wb");
+
+    if (original == NULL || temporario == NULL)
+    {
+        printf("Erro ao abrir arquivos para remoção.\n");
+        return;
+    }
+
+    while (fread(&temp, sizeof(Usuario), 1, original))
+    {
+        // Copia todos EXCETO o que tem a matrícula informada
+        if (strcmp(temp.matricula, mat) != 0)
+        {
+            fwrite(&temp, sizeof(Usuario), 1, temporario);
+        }
+    }
+
+    fclose(original);
+    fclose(temporario);
+
+    // Substitui o original pelo temporário
+    remove("data\\usuarios.dat");
+    rename("data\\usuarios_temp.dat", "data\\usuarios.dat");
+
+
+    printf("\nUsuário removido com sucesso!\n");
+    _getch();
+    system("cls");
+}
+
 void BuscarPorNome(char nome[100])
 {
     FILE *f = fopen("data\\usuarios.dat", "rb");
@@ -128,9 +220,6 @@ void BuscarPorNome(char nome[100])
             printf("Curso     : %s\n", u.curso);
             printf("Empréstimos ativos: %d\n\n", u.qtd_emprestimos_ativos);
             encontrado = 1;
-        }
-        if (encontrado == 1)
-        {
             printf("Digite qualquer tecla para voltar\n");
             _getch();
             break;
@@ -138,8 +227,10 @@ void BuscarPorNome(char nome[100])
     }
     fclose(f);
     if (encontrado != 1)
+    {
         printf("O usuário %s não foi encontrado\n", nome);
         _getch();
+    }
 }
 
 void BuscaPorMat(char matricula[7])
@@ -164,9 +255,6 @@ void BuscaPorMat(char matricula[7])
             printf("Curso     : %s\n", u.curso);
             printf("Empréstimos ativos: %d\n\n", u.qtd_emprestimos_ativos);
             encontrado = 1;
-        }
-        if (encontrado == 1)
-        {
             printf("Digite qualquer tecla para voltar\n");
             _getch();
             break;
@@ -174,8 +262,10 @@ void BuscaPorMat(char matricula[7])
     }
     fclose(f);
     if (encontrado != 1)
+    {
         printf("O usuário com a matrícula %s não foi encontrado\n", matricula);
         _getch();
+    }
 }
 
 void BuscarUsuarios()
@@ -241,7 +331,7 @@ void Users()
         }
         else if (posicaoAtual == 3)
         {
-            printf("Remover usuário.\n");
+            RemoverUsuario();
         }
         else if (posicaoAtual == 4)
         {
