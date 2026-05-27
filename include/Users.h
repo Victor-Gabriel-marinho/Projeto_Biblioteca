@@ -12,6 +12,7 @@ void RemoverUsuario();
 void BuscarPorNome(char nome[100]);
 void BuscaPorMat(char matricula[7]);
 void BuscarUsuarios();
+void EditarUsuario();
 void listUsers();
 
 #endif
