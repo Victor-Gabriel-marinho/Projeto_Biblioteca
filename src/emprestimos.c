@@ -19,9 +19,8 @@ int validacao_usuario(int qtd_usuario)
 { // função pra     checar se o usuario pode pegar mais um emprestimo, retorna 0 (false, não pode) ou retorna 1(true, pode)
 }
 
-int emp()
-{
-
+void addEmp(){
+    
     int matricula_aluno; // variavel local da matricula do aluno na execucao atual
     char codigo[8];      // variavel local de codigo do livro
     int qtd_disponivel;
@@ -50,6 +49,52 @@ int emp()
                 break;
             }
         }
+    }
+
+}
+
+void emp()
+{
+
+    
+    char opcoes[4][30] = {"Registrar emprestimo", "Registrar devolução", "Listar emprestimos em atraso", "Voltar"};
+
+    while (1)
+    {
+        // Função para criar interface
+        int posicaoAtual = criarMenu("TELA DE USUÁRIOS", opcoes, 6);
+
+        if (posicaoAtual == 0)
+        {
+            // Função de adicionar usuários
+            AddUsers();
+        }
+        else if (posicaoAtual == 1)
+        {
+            // Função de listar usuários
+            listUsers();
+        }
+        else if (posicaoAtual == 2)
+        {
+            // Função de buscar usuarios por nome ou matricula
+            BuscarUsuarios();
+        }
+        else if (posicaoAtual == 3)
+        {
+            // Função de remover usuario através da matrícula
+            RemoverUsuario();
+        }
+        else if (posicaoAtual == 4)
+        {
+            // Função de editar usuario através da matrícula
+            EditarUsuario();
+        }
+        else if (posicaoAtual == 5)
+        {
+            system("cls");
+            break;
+        }
+        system("cls");
     }
     return 0;
 }
