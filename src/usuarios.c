@@ -57,7 +57,7 @@ void AddUsers()
         printf("Nome      : %s\n", novoAluno.nome);
         printf("Curso     : %s\n", novoAluno.curso);
         printf("Empréstimos ativos: %d\n\n", novoAluno.qtd_emprestimos_ativos);
-        printf("Pressione Enter para confirmar ou BackSpace para voltar");
+        printf("Pressione Enter para confirmar ou BackSpace para voltar\n");
         tecla = _getch();
 
         if (tecla == 8)
@@ -67,17 +67,21 @@ void AddUsers()
         }
         else if (tecla == 13)
         {
-            FILE *usuarios = fopen("data\\usuarios.dat", "ab");
 
-            if (usuarios == NULL)
+            Usuario *temp = realloc(usuarios, (totalUsuarios + 1) * sizeof(Usuario));
+            if (temp == NULL)
             {
-                printf("Erro ao abrir o arquivo");
-                _getch();
+                printf("Erro: falha ao alocar memória!\n");
+                free(usuarios);
                 return;
             }
-            // Inserindo novo usuário no arquivo
-            fwrite(&novoAluno, sizeof(Usuario), 1, usuarios);
-            fclose(usuarios);
+
+            usuarios = temp;
+            usuarios[totalUsuarios] = novoAluno;
+            totalUsuarios++;
+
+            SalvarUsuarios(usuarios, totalUsuarios);
+
             printf("\nUsuário salvo com sucesso!\nPressione qualquer tecla para sair\n");
             _getch();
             system("cls");
@@ -88,7 +92,7 @@ void AddUsers()
 
 void listUsers()
 {
-    // Percorrendo o arquivo de usuários
+    // Percorrendo o vetor de usuários
     for (int i = 0; i < totalUsuarios; i++)
     {
         printf("=== Usuário %d ===\n", i + 1);
@@ -106,7 +110,9 @@ void RemoverUsuario()
     char tecla;
     int encontrado = 0;
     Usuario usuarioEncontrado;
-    Usuario temp;
+    Usuario *NovosUsuarios;
+    int i = 0, j=0;
+
     mostrarCursor();
 
     printf("=== REMOVER USUÁRIO ===\n\n");
@@ -114,24 +120,16 @@ void RemoverUsuario()
     printf("Digite a matrícula do usuário que deseja remover: ");
     scanf("%s", mat);
 
-    FILE *a = fopen("data\\usuarios.dat", "rb");
-    if (a == NULL)
+    for (i = 0; i < totalUsuarios; i++)
     {
-        printf("Erro ao abrir o arquivo.\n");
-        return;
-    }
-
-    while (fread(&usuarioEncontrado, sizeof(Usuario), 1, a) == 1)
-    {
-        if (strcmp(usuarioEncontrado.matricula, mat) == 0)
-        {
+        if (strcasecmp(mat, usuarios[i].matricula) == 0){
+            usuarioEncontrado = usuarios[i];
             encontrado = 1;
             break;
         }
     }
-    fclose(a);
 
-    if (encontrado != 1)
+    if (encontrado != 1 || strlen(usuarioEncontrado.matricula) == "")
     {
         printf("Usuário com matrícula '%s' não encontrado.\n", mat);
         _getch();
@@ -149,7 +147,6 @@ void RemoverUsuario()
     tecla = _getch();
     if (tecla == 8)
     {
-
         system("cls");
         return;
     }
@@ -158,30 +155,29 @@ void RemoverUsuario()
         return;
     }
 
-    FILE *original = fopen("data\\usuarios.dat", "rb");
-    FILE *temporario = fopen("data\\usuarios_temp.dat", "wb");
-
-    if (original == NULL || temporario == NULL)
+    Usuario *temp = realloc(usuarios, (totalUsuarios - 1) * sizeof(Usuario));
+    
+    if (temp == NULL)
     {
-        printf("Erro ao abrir arquivos para remoção.\n");
+        printf("Erro: falha ao alocar memória!\n");
+        free(NovosUsuarios);
         return;
     }
 
-    while (fread(&temp, sizeof(Usuario), 1, original))
+    NovosUsuarios = temp;
+
+    for (i = 0; i < totalUsuarios; i++)
     {
-        // Copia todos EXCETO o que tem a matrícula informada
-        if (strcmp(temp.matricula, mat) != 0)
+        if (strcmp(usuarios[i].matricula, usuarioEncontrado.matricula) != 0)
         {
-            fwrite(&temp, sizeof(Usuario), 1, temporario);
+            NovosUsuarios[j] = usuarios[i];
+            j++;
         }
     }
+    totalUsuarios--;
 
-    fclose(original);
-    fclose(temporario);
-
-    // Substitui o original pelo temporário
-    remove("data\\usuarios.dat");
-    rename("data\\usuarios_temp.dat", "data\\usuarios.dat");
+    SalvarUsuarios(NovosUsuarios,totalUsuarios);
+    usuarios = NovosUsuarios;
 
     printf("\nUsuário removido com sucesso!\n");
     _getch();

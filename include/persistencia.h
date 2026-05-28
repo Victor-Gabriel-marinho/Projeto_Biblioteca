@@ -7,6 +7,6 @@
 #include "biblioteca.h"
 
 Usuario *CarregarUsuarios(int *total);
-void SalvarUsuarios();
+void SalvarUsuarios (Usuario *usuarios, int totalusu);
 
 #endif

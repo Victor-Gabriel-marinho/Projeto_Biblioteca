@@ -24,7 +24,6 @@ Usuario *CarregarUsuarios (int *total) {
             break;
         }
         lista = novo;
-        system("pause");
         lista[cont] = temp;
         cont++;
     }    
@@ -33,6 +32,18 @@ Usuario *CarregarUsuarios (int *total) {
     return lista;
 }
 
-void SalvarUsuarios () { 
-    
+void SalvarUsuarios (Usuario *usuarios, int totalusu) { 
+    FILE *arq = fopen("data\\usuarios.dat", "wb");
+
+    if (arq == NULL) {
+        printf("Erro ao abrir o arquivo\n");
+        free(usuarios);
+        system("pause");
+        return;
+    }
+
+    fwrite(usuarios,sizeof(Usuario), totalusu, arq);
+
+    fclose(arq);
+    return;
 }
