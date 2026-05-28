@@ -4,6 +4,10 @@
 #include <windows.h>
 #include <conio.h>
 #include "interface.h"
+#include "biblioteca.h"
+
+extern Usuario *usuarios;
+extern int totalUsuarios;
 
 // Definindo funções de usuários
 void Users();
