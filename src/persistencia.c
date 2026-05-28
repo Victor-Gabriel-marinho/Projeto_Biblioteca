@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "persistencia.h"
-#include "biblioteca.h"
+#include "../include/persistencia.h"
+#include "../include/biblioteca.h"
 
 Usuario *CarregarUsuarios (int *total) {
     Usuario temp;
@@ -34,5 +34,5 @@ Usuario *CarregarUsuarios (int *total) {
 }
 
 void SalvarUsuarios () { 
-
+    
 }

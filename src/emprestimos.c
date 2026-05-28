@@ -1,11 +1,11 @@
 #include <stdio.h>
-#include <biblioteca.h>
+#include "../include/biblioteca.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "./algoritmos.h"
-#include "interface.h"
+#include "../include/algoritmos.h"
+#include "../include/interface.h"
 
 int validacao_codigo(char codigo[8])
 { // função pra checar se o codigo enviado é válido, retorna 0 (false, não é valido) ou retorna 1(true, é valido)
