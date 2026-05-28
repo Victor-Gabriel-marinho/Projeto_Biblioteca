@@ -7,6 +7,10 @@
 #include "../include/Users.h"
 #include "../include/biblioteca.h"
 #include "../include/algoritmos.h"
+#include "../include/persistencia.h"
+
+Usuario *usuarios = NULL;
+int totalUsuarios = 0;
 
 void AddUsers()
 {
@@ -84,36 +88,23 @@ void AddUsers()
 
 void listUsers()
 {
-    FILE *f = fopen("data\\usuarios.dat", "rb");
-
-    if (f == NULL)
-    {
-        printf("Erro ao abrir o arquivo");
-        system("Pause");
-        return;
-    }
-
-    Usuario u;
-    int i = 1;
-
     // Percorrendo o arquivo de usuários
-    while (fread(&u, sizeof(Usuario), 1, f) == 1)
+    for (int i = 0; i < totalUsuarios; i++)
     {
-        printf("=== Usuário %d ===\n", i++);
-        printf("Matrícula : %s\n", u.matricula);
-        printf("Nome      : %s\n", u.nome);
-        printf("Curso     : %s\n", u.curso);
-        printf("Empréstimos ativos: %d\n\n", u.qtd_emprestimos_ativos);
+        printf("=== Usuário %d ===\n", i + 1);
+        printf("Matrícula : %s\n", usuarios[i].matricula);
+        printf("Nome      : %s\n", usuarios[i].nome);
+        printf("Curso     : %s\n", usuarios[i].curso);
+        printf("Empréstimos ativos: %d\n\n", usuarios[i].qtd_emprestimos_ativos);
     }
     system("Pause");
-    fclose(f);
 }
 
 void RemoverUsuario()
 {
     char mat[8];
     char tecla;
-    int encontrado;
+    int encontrado = 0;
     Usuario usuarioEncontrado;
     Usuario temp;
     mostrarCursor();
@@ -130,7 +121,7 @@ void RemoverUsuario()
         return;
     }
 
-    while (fread(&usuarioEncontrado, sizeof(Usuario), 1, a))
+    while (fread(&usuarioEncontrado, sizeof(Usuario), 1, a) == 1)
     {
         if (strcmp(usuarioEncontrado.matricula, mat) == 0)
         {
@@ -140,7 +131,7 @@ void RemoverUsuario()
     }
     fclose(a);
 
-    if (!encontrado)
+    if (encontrado != 1)
     {
         printf("Usuário com matrícula '%s' não encontrado.\n", mat);
         _getch();
@@ -307,7 +298,7 @@ void EditarUsuario()
 {
     char mat[8];
     char tecla;
-    int encontrado;
+    int encontrado = 0;
     Usuario usuarioEncontrado;
     Usuario temp;
     Usuario usuarioEditado;
@@ -325,7 +316,7 @@ void EditarUsuario()
         return;
     }
 
-    while (fread(&usuarioEncontrado, sizeof(Usuario), 1, a))
+    while (fread(&usuarioEncontrado, sizeof(Usuario), 1, a) == 1)
     {
         if (strcmp(usuarioEncontrado.matricula, mat) == 0)
         {
@@ -335,7 +326,7 @@ void EditarUsuario()
     }
     fclose(a);
 
-    if (!encontrado)
+    if (encontrado != 1)
     {
         printf("Usuário com matrícula '%s' não encontrado.\n", mat);
         _getch();
@@ -367,16 +358,18 @@ void EditarUsuario()
     printf("ou pressione Enter para manter o anterior\n");
     fgets(usuarioEditado.nome, MAX_STRING, stdin);
     usuarioEditado.nome[strcspn(usuarioEditado.nome, "\n")] = '\0';
-    
+
     printf("\nDigite o novo curso\n");
     printf("ou pressione Enter para manter o anterior\n");
     fgets(usuarioEditado.curso, MAX_STRING, stdin);
     usuarioEditado.nome[strcspn(usuarioEditado.nome, "\n")] = '\0';
-    
-    if (strlen(usuarioEditado.nome) == 1) {
+
+    if (strlen(usuarioEditado.nome) == 1)
+    {
         strcpy(usuarioEditado.nome, usuarioEncontrado.nome);
     }
-     if (strlen(usuarioEditado.curso) == 1) {
+    if (strlen(usuarioEditado.curso) == 1)
+    {
         strcpy(usuarioEditado.curso, usuarioEncontrado.curso);
     }
 
@@ -385,24 +378,27 @@ void EditarUsuario()
 
     FILE *original = fopen("data\\usuarios.dat", "rb");
     FILE *temporario = fopen("data\\usuarios_temp.dat", "wb");
-    
+
     if (original == NULL || temporario == NULL)
     {
         printf("Erro ao abrir arquivos para remoção.\n");
         return;
     }
 
-    while (fread(&temp, sizeof(Usuario), 1, original)){
-        if (strcmp(temp.matricula, usuarioEncontrado.matricula) == 0) {
+    while (fread(&temp, sizeof(Usuario), 1, original))
+    {
+        if (strcmp(temp.matricula, usuarioEncontrado.matricula) == 0)
+        {
 
             // Se a matrícula for igual ao encontrado ele escreve o novo usuário
-            fwrite(&usuarioEditado,sizeof(Usuario),1,temporario);
-            
-        }else {
-            
+            fwrite(&usuarioEditado, sizeof(Usuario), 1, temporario);
+        }
+        else
+        {
+
             // Se for diferente ele escreve oque ja tinha
-            fwrite(&temp,sizeof(Usuario),1,temporario);
-        } 
+            fwrite(&temp, sizeof(Usuario), 1, temporario);
+        }
     }
     fcloseall();
 
@@ -416,6 +412,8 @@ void EditarUsuario()
 
 void Users()
 {
+    usuarios = CarregarUsuarios(&totalUsuarios);
+
     // Criando opções da tela de gerenciamento de usuários
     char opcoes[6][30] = {"Adicionar Usuário", "Listar Usuários", "Buscar usuário", "Remover Usuário", "Editar usuário", "Voltar"};
 
@@ -457,3 +455,4 @@ void Users()
         system("cls");
     }
 }
+
