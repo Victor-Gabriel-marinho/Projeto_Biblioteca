@@ -11,10 +11,12 @@
 #include "../include/persistencia.h"
 
 Banco db;
+Usuario *usuarios = NULL;
+int totalUsuarios = 0;
 
 int main()
 {
-
+    usuarios = CarregarUsuarios(&totalUsuarios);
     // Definindo as opções do Menu principal
     char opcoes[6][30] = {"Gerenciar Usuários", "Gerenciar Livros", "Realizar Empréstimos", "Registrar devolução", "Relatórios", "Sair"};
 

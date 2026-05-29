@@ -1,4 +1,5 @@
 #include "../include/algoritmos.h"
+#include "../include/Users.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -58,4 +59,43 @@ int busca_livro(char codigo[8])
     }
     // se o livro não for encontrado, retorna -1
     return -1;
+}
+
+void BuscarUsuarioPorNome(Usuario *usuarioEncontrado,char nome[8])
+{
+    int encontrado = 0;
+
+    for (int i = 0; i < totalUsuarios; i++)
+    {
+        if (strcmp(nome, usuarios[i].nome) == 0)
+        {
+            *usuarioEncontrado = usuarios[i];
+            encontrado = 1;
+            break;
+        }
+    }
+    if (encontrado != 1)
+    {
+        printf("O usuário %s não foi encontrado\n", nome);
+        _getch();
+    }
+}
+
+void BuscarUsuarioPorMat(Usuario *usuarioEncontrado, char matricula[8])
+{
+    int encontrado = 0;
+    for (int i = 0; i < totalUsuarios; i++)
+    {
+        if (strcmp(matricula, usuarios[i].matricula) == 0)
+        {
+            *usuarioEncontrado = usuarios[i];
+            encontrado = 1;
+            break;
+        }
+    }
+    if (encontrado != 1)
+    {
+        printf("O usuário com a matrícula %s não foi encontrado\n", matricula);
+        _getch();
+    }
 }

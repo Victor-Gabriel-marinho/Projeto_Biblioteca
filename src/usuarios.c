@@ -9,9 +9,6 @@
 #include "../include/algoritmos.h"
 #include "../include/persistencia.h"
 
-Usuario *usuarios = NULL;
-int totalUsuarios = 0;
-
 void AddUsers()
 {
     srand(time(NULL));
@@ -92,15 +89,36 @@ void AddUsers()
 
 void listUsers()
 {
+
+    printf("\t\t\t=== LISTA DE USUÁRIOS ===\n\n");
+
     // Percorrendo o vetor de usuários
-    for (int i = 0; i < totalUsuarios; i++)
-    {
-        printf("=== Usuário %d ===\n", i + 1);
-        printf("Matrícula : %s\n", usuarios[i].matricula);
-        printf("Nome      : %s\n", usuarios[i].nome);
-        printf("Curso     : %s\n", usuarios[i].curso);
-        printf("Empréstimos ativos: %d\n\n", usuarios[i].qtd_emprestimos_ativos);
-    }
+   for (int i = 0; i < totalUsuarios; i += 3)
+{
+    int colunas = totalUsuarios - i;
+    if (colunas > 3) colunas = 3;
+
+    for (int c = 0; c < colunas; c++)
+        printf("=== Usuário %d ===\t\t", i + c + 1);
+    printf("\n");
+
+    for (int c = 0; c < colunas; c++)
+        printf("Matrícula : %-20s", usuarios[i + c].matricula);
+    printf("\n");
+
+    for (int c = 0; c < colunas; c++)
+        printf("Nome      : %-20s", usuarios[i + c].nome);
+    printf("\n");
+
+    for (int c = 0; c < colunas; c++)
+        printf("Curso     : %-20s", usuarios[i + c].curso);
+    printf("\n");
+
+    for (int c = 0; c < colunas; c++)
+        printf("Empréstimos ativos: %-5d\t", usuarios[i + c].qtd_emprestimos_ativos);
+    printf("\n\n");
+    
+}
     system("Pause");
 }
 
@@ -111,7 +129,7 @@ void RemoverUsuario()
     int encontrado = 0;
     Usuario usuarioEncontrado;
     Usuario *NovosUsuarios;
-    int i = 0, j=0;
+    int i = 0, j = 0;
 
     mostrarCursor();
 
@@ -122,7 +140,8 @@ void RemoverUsuario()
 
     for (i = 0; i < totalUsuarios; i++)
     {
-        if (strcasecmp(mat, usuarios[i].matricula) == 0){
+        if (strcasecmp(mat, usuarios[i].matricula) == 0)
+        {
             usuarioEncontrado = usuarios[i];
             encontrado = 1;
             break;
@@ -156,7 +175,7 @@ void RemoverUsuario()
     }
 
     Usuario *temp = realloc(usuarios, (totalUsuarios - 1) * sizeof(Usuario));
-    
+
     if (temp == NULL)
     {
         printf("Erro: falha ao alocar memória!\n");
@@ -176,82 +195,12 @@ void RemoverUsuario()
     }
     totalUsuarios--;
 
-    SalvarUsuarios(NovosUsuarios,totalUsuarios);
+    SalvarUsuarios(NovosUsuarios, totalUsuarios);
     usuarios = NovosUsuarios;
 
     printf("\nUsuário removido com sucesso!\n");
     _getch();
     system("cls");
-}
-
-void BuscarPorNome(char nome[100])
-{
-    FILE *f = fopen("data\\usuarios.dat", "rb");
-    if (f == NULL)
-    {
-        printf("Erro ao abrir o arquivo\n");
-        _getch();
-        return;
-    }
-
-    Usuario u;
-    int encontrado = 0;
-    while (fread(&u, sizeof(Usuario), 1, f) == 1)
-    {
-        if (strcmp(nome, u.nome) == 0)
-        {
-            printf("=== Usuário ===\n");
-            printf("Matrícula : %s\n", u.matricula);
-            printf("Nome      : %s\n", u.nome);
-            printf("Curso     : %s\n", u.curso);
-            printf("Empréstimos ativos: %d\n\n", u.qtd_emprestimos_ativos);
-            encontrado = 1;
-            printf("Digite qualquer tecla para voltar\n");
-            _getch();
-            break;
-        }
-    }
-    fclose(f);
-    if (encontrado != 1)
-    {
-        printf("O usuário %s não foi encontrado\n", nome);
-        _getch();
-    }
-}
-
-void BuscaPorMat(char matricula[7])
-{
-    FILE *f = fopen("data\\usuarios.dat", "rb");
-    if (f == NULL)
-    {
-        printf("Erro ao abrir o arquivo\n");
-        _getch();
-        return;
-    }
-
-    Usuario u;
-    int encontrado = 0;
-    while (fread(&u, sizeof(Usuario), 1, f) == 1)
-    {
-        if (strcmp(matricula, u.matricula) == 0)
-        {
-            printf("=== Usuário ===\n");
-            printf("Matrícula : %s\n", u.matricula);
-            printf("Nome      : %s\n", u.nome);
-            printf("Curso     : %s\n", u.curso);
-            printf("Empréstimos ativos: %d\n\n", u.qtd_emprestimos_ativos);
-            encontrado = 1;
-            printf("Digite qualquer tecla para voltar\n");
-            _getch();
-            break;
-        }
-    }
-    fclose(f);
-    if (encontrado != 1)
-    {
-        printf("O usuário com a matrícula %s não foi encontrado\n", matricula);
-        _getch();
-    }
 }
 
 void BuscarUsuarios()
@@ -266,21 +215,45 @@ void BuscarUsuarios()
         if (posicaoAtual == 0)
         {
             mostrarCursor();
-            char nome[100];
+            char nome[8];
+            Usuario usuarioEncontrado;
+
             printf("Digite o nome do usuário: ");
-            fgets(nome, 100, stdin);
+            fgets(nome, 8, stdin);
             nome[strcspn(nome, "\n")] = '\0';
-            BuscarPorNome(nome);
+
+            BuscarUsuarioPorNome(&usuarioEncontrado, nome);
+
+            printf("=== Usuário ===\n");
+            printf("Matrícula : %s\n", usuarioEncontrado.matricula);
+            printf("Nome      : %s\n", usuarioEncontrado.nome);
+            printf("Curso     : %s\n", usuarioEncontrado.curso);
+            printf("Empréstimos ativos: %d\n\n", usuarioEncontrado.qtd_emprestimos_ativos);
+
+            printf("Digite qualquer tecla para voltar\n");
+            _getch();
         }
         else if (posicaoAtual == 1)
         {
             // Busca por matricula
             mostrarCursor();
-            char matricula[100];
+
+            Usuario usuarioEncontrado;
+            char matricula[8];
+
             printf("Digite o nome do usuário: ");
-            fgets(matricula, 100, stdin);
+            fgets(matricula, 8, stdin);
             matricula[strcspn(matricula, "\n")] = '\0';
-            BuscaPorMat(matricula);
+
+            BuscarUsuarioPorMat(&usuarioEncontrado, matricula);
+
+            printf("=== Usuário ===\n");
+            printf("Matrícula : %s\n", usuarioEncontrado.matricula);
+            printf("Nome      : %s\n", usuarioEncontrado.nome);
+            printf("Curso     : %s\n", usuarioEncontrado.curso);
+            printf("Empréstimos ativos: %d\n\n", usuarioEncontrado.qtd_emprestimos_ativos);
+            printf("Digite qualquer tecla para voltar\n");
+            _getch();
         }
         else if (posicaoAtual == 2)
         {
@@ -305,22 +278,15 @@ void EditarUsuario()
     printf("Digite a matrícula do usuário que deseja editar: ");
     scanf("%s", mat);
 
-    FILE *a = fopen("data\\usuarios.dat", "rb");
-    if (a == NULL)
+    for (int i = 0; i < totalUsuarios; i++)
     {
-        printf("Erro ao abrir o arquivo.\n");
-        return;
-    }
-
-    while (fread(&usuarioEncontrado, sizeof(Usuario), 1, a) == 1)
-    {
-        if (strcmp(usuarioEncontrado.matricula, mat) == 0)
+        if (strcmp(usuarios[i].matricula, mat) == 0)
         {
+            usuarioEncontrado = usuarios[i];
             encontrado = 1;
             break;
         }
     }
-    fclose(a);
 
     if (encontrado != 1)
     {
@@ -358,13 +324,13 @@ void EditarUsuario()
     printf("\nDigite o novo curso\n");
     printf("ou pressione Enter para manter o anterior\n");
     fgets(usuarioEditado.curso, MAX_STRING, stdin);
-    usuarioEditado.nome[strcspn(usuarioEditado.nome, "\n")] = '\0';
+    usuarioEditado.curso[strcspn(usuarioEditado.curso, "\n")] = '\0';
 
-    if (strlen(usuarioEditado.nome) == 1)
+    if (strcmp(usuarioEditado.nome, "") == 0 || strcmp(usuarioEditado.nome, " ") == 0)
     {
         strcpy(usuarioEditado.nome, usuarioEncontrado.nome);
     }
-    if (strlen(usuarioEditado.curso) == 1)
+    if (strcmp(usuarioEditado.curso, "") == 0 || strcmp(usuarioEditado.curso, " ") == 0)
     {
         strcpy(usuarioEditado.curso, usuarioEncontrado.curso);
     }
@@ -372,34 +338,15 @@ void EditarUsuario()
     strcpy(usuarioEditado.matricula, usuarioEncontrado.matricula);
     usuarioEditado.qtd_emprestimos_ativos = usuarioEncontrado.qtd_emprestimos_ativos;
 
-    FILE *original = fopen("data\\usuarios.dat", "rb");
-    FILE *temporario = fopen("data\\usuarios_temp.dat", "wb");
-
-    if (original == NULL || temporario == NULL)
+    for (int i = 0; i < totalUsuarios; i++)
     {
-        printf("Erro ao abrir arquivos para remoção.\n");
-        return;
-    }
-
-    while (fread(&temp, sizeof(Usuario), 1, original))
-    {
-        if (strcmp(temp.matricula, usuarioEncontrado.matricula) == 0)
+        if (strcmp(usuarios[i].matricula, usuarioEncontrado.matricula) == 0)
         {
-
-            // Se a matrícula for igual ao encontrado ele escreve o novo usuário
-            fwrite(&usuarioEditado, sizeof(Usuario), 1, temporario);
-        }
-        else
-        {
-
-            // Se for diferente ele escreve oque ja tinha
-            fwrite(&temp, sizeof(Usuario), 1, temporario);
+            usuarios[i] = usuarioEditado;
         }
     }
-    fcloseall();
 
-    remove("data\\usuarios.dat");
-    rename("data\\usuarios_temp.dat", "data\\usuarios.dat");
+    SalvarUsuarios(usuarios, totalUsuarios);
 
     printf("\nUsuário editado com sucesso!\n");
     _getch();
@@ -408,7 +355,6 @@ void EditarUsuario()
 
 void Users()
 {
-    usuarios = CarregarUsuarios(&totalUsuarios);
 
     // Criando opções da tela de gerenciamento de usuários
     char opcoes[6][30] = {"Adicionar Usuário", "Listar Usuários", "Buscar usuário", "Remover Usuário", "Editar usuário", "Voltar"};
