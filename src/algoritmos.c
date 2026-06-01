@@ -162,6 +162,18 @@ void merge_sort_livros(Livro *saida, int n)
     merge_sort_livros_rec(saida, tmp, 0, n - 1);
 }
 
+static int cmp_data(const char *a, const char *b)
+{
+    int da, ma, aa, db2, mb, ab;
+    sscanf(a, "%d/%d/%d", &da, &ma, &aa);
+    sscanf(b, "%d/%d/%d", &db2, &mb, &ab);
+    if (aa != ab)
+        return aa - ab;
+    if (ma != mb)
+        return ma - mb;
+    return da - db2;
+}
+
 static void merge_emp(Emprestimo *vet, Emprestimo *tmp, int esq, int meio, int dir)
 {
     int i = esq, j = meio + 1, k = esq;
@@ -218,14 +230,3 @@ void merge_sort_emprestimos_data(Emprestimo *vet, int n)
     merge_sort_emp_rec(vet, tmp, 0, n - 1);
 }
 
-static int cmp_data(const char *a, const char *b)
-{
-    int da, ma, aa, db2, mb, ab;
-    sscanf(a, "%d/%d/%d", &da, &ma, &aa);
-    sscanf(b, "%d/%d/%d", &db2, &mb, &ab);
-    if (aa != ab)
-        return aa - ab;
-    if (ma != mb)
-        return ma - mb;
-    return da - db2;
-}
