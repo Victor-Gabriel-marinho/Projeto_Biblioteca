@@ -217,3 +217,15 @@ void merge_sort_emprestimos_data(Emprestimo *vet, int n)
     // Ordena os empréstimos por data de retirada
     merge_sort_emp_rec(vet, tmp, 0, n - 1);
 }
+
+static int cmp_data(const char *a, const char *b)
+{
+    int da, ma, aa, db2, mb, ab;
+    sscanf(a, "%d/%d/%d", &da, &ma, &aa);
+    sscanf(b, "%d/%d/%d", &db2, &mb, &ab);
+    if (aa != ab)
+        return aa - ab;
+    if (ma != mb)
+        return ma - mb;
+    return da - db2;
+}
