@@ -34,6 +34,7 @@ void regDev(){ // função pra registrar devoluções
     int matricula_aluno;
     while(1){ // loop central da função 
         printf("Qual a matricula do usuario que voce deseja registrar a devolucao? Digite 0 pra voltar");
+
         scanf("%d", matricula_aluno);
         if(matricula_aluno == 0){
             return;
@@ -124,7 +125,7 @@ void emp()
 {
 
     
-    char opcoes[4][30] = {"Registrar emprestimo", "Registrar devolução", "Listar emprestimos em atraso", "Voltar"};
+    char opcoes[3][30] = {"Registrar emprestimo", "Listar emprestimos em atraso", "Voltar"};
 
     while (1)
     {
@@ -138,15 +139,10 @@ void emp()
         }
         else if (posicaoAtual == 1)
         {
-            // Função de listar usuários
-            regDev();
-        }
-        else if (posicaoAtual == 2)
-        {
             // Função de buscar usuarios por nome ou matricula
             listEmp_atraso();
         }
-        else if (posicaoAtual == 3)
+        else if (posicaoAtual == 2)
         {
             system("cls");
             break;

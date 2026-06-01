@@ -38,11 +38,11 @@ int main()
         }
         else if (posicaoAtual == 2)
         {
-            printf("emprestimos\n");
+            emp();
         }
         else if (posicaoAtual == 3)
         {
-            printf("Devolução\n");
+            regDev;
         }
         else if (posicaoAtual == 3)
         {
