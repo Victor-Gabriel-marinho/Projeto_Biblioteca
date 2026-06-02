@@ -33,9 +33,11 @@ void regDev(){ // função pra registrar devoluções
     int qtd_emprestimo;
     int matricula_aluno;
     while(1){ // loop central da função 
-        printf("Qual a matricula do usuario que voce deseja registrar a devolucao? Digite 0 pra voltar");
 
-        scanf("%d", matricula_aluno);
+        mostrarCursor();
+        printf("Qual a matricula do usuario que voce deseja registrar a devolucao? Digite 0 pra voltar: ");
+        scanf("%d", &matricula_aluno);
+
         if(matricula_aluno == 0){
             return;
         }
@@ -49,7 +51,7 @@ void regDev(){ // função pra registrar devoluções
                     printf("O usario não possui emprestimos ativos. Escolha outro");
                     continue;
                 }
-                printf("O usuario possui %d emprestimos ativos, quais desses voce quer tirar?");
+                printf("O usuario possui %d emprestimos ativos, quais desses voce quer tirar? ");
                 listEmp_user(matricula_aluno);
                 scanf("%d", &remover);
                 if(remover < qtd_emprestimo && remover > qtd_emprestimo){ 
