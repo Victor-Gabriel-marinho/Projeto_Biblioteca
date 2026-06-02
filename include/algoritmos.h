@@ -13,8 +13,8 @@ ultilizando a busca binaria, sendo um metodo mais pratico*/
 int busca_livro(char codigo[8]);
 
 // Funções de busca de usuários
-void BuscarUsuarioPorNome(Usuario *usuarioEncontrado,char nome[8]);
-void BuscarUsuarioPorMat(Usuario *usuarioEncontrado,char matricula[8]);
+int BuscarUsuarioPorNome(Usuario *usuarioEncontrado,char nome[8]);
+int BuscarUsuarioPorMat(Usuario *usuarioEncontrado,char matricula[8]);
 
 // Função para ordenar os livros por título usando merge sort
 void merge_sort_livros(Livro *saida, int n);

@@ -63,7 +63,7 @@ int busca_livro(char codigo[8])
 
 // Busca um usuário pelo nome e copia os dados para usuarioEncontrado.
 // Se o nome não for encontrado, exibe mensagem de erro.
-void BuscarUsuarioPorNome(Usuario *usuarioEncontrado, char nome[8])
+int BuscarUsuarioPorNome(Usuario *usuarioEncontrado, char nome[8])
 {
     int encontrado = 0;
 
@@ -74,18 +74,20 @@ void BuscarUsuarioPorNome(Usuario *usuarioEncontrado, char nome[8])
             *usuarioEncontrado = usuarios[i];
             encontrado = 1;
             break;
+            return 0;
         }
     }
     if (encontrado != 1)
     {
         printf("O usuário %s não foi encontrado\n", nome);
-        _getch();
+        system("pause");
+        return 1;
     }
 }
 
 // Busca um usuário pela matrícula e copia os dados para usuarioEncontrado.
 // Se a matrícula não for encontrada, exibe mensagem de erro.
-void BuscarUsuarioPorMat(Usuario *usuarioEncontrado, char matricula[8])
+int BuscarUsuarioPorMat(Usuario *usuarioEncontrado, char matricula[8])
 {
     int encontrado = 0;
     for (int i = 0; i < totalUsuarios; i++)
@@ -94,13 +96,15 @@ void BuscarUsuarioPorMat(Usuario *usuarioEncontrado, char matricula[8])
         {
             *usuarioEncontrado = usuarios[i];
             encontrado = 1;
-            break;
+            system("pause");
+            return 0;
         }
     }
     if (encontrado != 1)
     {
         printf("O usuário com a matrícula %s não foi encontrado\n", matricula);
         _getch();
+        return 1;
     }
 }
 

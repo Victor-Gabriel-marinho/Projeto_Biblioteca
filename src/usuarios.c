@@ -3,6 +3,7 @@
 #include <conio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 #include "../include/interface.h"
 #include "../include/Users.h"
 #include "../include/biblioteca.h"
@@ -33,7 +34,7 @@ void AddUsers()
             printf("Nome inválido! Tente novamente.\n");
         }
 
-    } while (strlen(novoAluno.nome) == 0);
+    } while (strlen(novoAluno.nome) == 0 || strcmp(novoAluno.nome, " ") == 0);
 
     do
     {
@@ -44,7 +45,7 @@ void AddUsers()
         if (strlen(novoAluno.curso) == 0)
             printf("Curso inválido! Tente novamente.\n");
 
-    } while (strlen(novoAluno.curso) == 0);
+    } while (strlen(novoAluno.curso) == 0 || strcmp(novoAluno.curso, " ") == 0);
 
     while (1)
     {
@@ -93,32 +94,32 @@ void listUsers()
     printf("\t\t\t=== LISTA DE USUÁRIOS ===\n\n");
 
     // Percorrendo o vetor de usuários
-   for (int i = 0; i < totalUsuarios; i += 3)
-{
-    int colunas = totalUsuarios - i;
-    if (colunas > 3) colunas = 3;
+    for (int i = 0; i < totalUsuarios; i += 3)
+    {
+        int colunas = totalUsuarios - i;
+        if (colunas > 3)
+            colunas = 3;
 
-    for (int c = 0; c < colunas; c++)
-        printf("=== Usuário %d ===\t\t", i + c + 1);
-    printf("\n");
+        for (int c = 0; c < colunas; c++)
+            printf("=== Usuário %d ===\t\t", i + c + 1);
+        printf("\n");
 
-    for (int c = 0; c < colunas; c++)
-        printf("Matrícula : %-20s", usuarios[i + c].matricula);
-    printf("\n");
+        for (int c = 0; c < colunas; c++)
+            printf("Matrícula : %-20s", usuarios[i + c].matricula);
+        printf("\n");
 
-    for (int c = 0; c < colunas; c++)
-        printf("Nome      : %-20s", usuarios[i + c].nome);
-    printf("\n");
+        for (int c = 0; c < colunas; c++)
+            printf("Nome      : %-20s", usuarios[i + c].nome);
+        printf("\n");
 
-    for (int c = 0; c < colunas; c++)
-        printf("Curso     : %-20s", usuarios[i + c].curso);
-    printf("\n");
+        for (int c = 0; c < colunas; c++)
+            printf("Curso     : %-20s", usuarios[i + c].curso);
+        printf("\n");
 
-    for (int c = 0; c < colunas; c++)
-        printf("Empréstimos ativos: %-5d\t", usuarios[i + c].qtd_emprestimos_ativos);
-    printf("\n\n");
-    
-}
+        for (int c = 0; c < colunas; c++)
+            printf("Empréstimos ativos: %-5d\t", usuarios[i + c].qtd_emprestimos_ativos);
+        printf("\n\n");
+    }
     system("Pause");
 }
 
@@ -138,22 +139,9 @@ void RemoverUsuario()
     printf("Digite a matrícula do usuário que deseja remover: ");
     scanf("%s", mat);
 
-    for (i = 0; i < totalUsuarios; i++)
-    {
-        if (strcasecmp(mat, usuarios[i].matricula) == 0)
-        {
-            usuarioEncontrado = usuarios[i];
-            encontrado = 1;
-            break;
-        }
-    }
+    encontrado = BuscarUsuarioPorMat(&usuarioEncontrado, mat);
+    if (encontrado == 1)  return;
 
-    if (encontrado != 1 || strlen(usuarioEncontrado.matricula) == "")
-    {
-        printf("Usuário com matrícula '%s' não encontrado.\n", mat);
-        _getch();
-        return;
-    }
 
     printf("\nUsuário encontrado:\n");
     printf("Matrícula: %s\n", usuarioEncontrado.matricula);
@@ -216,13 +204,18 @@ void BuscarUsuarios()
         {
             mostrarCursor();
             char nome[8];
+            int result;
             Usuario usuarioEncontrado;
 
             printf("Digite o nome do usuário: ");
             fgets(nome, 8, stdin);
             nome[strcspn(nome, "\n")] = '\0';
 
-            BuscarUsuarioPorNome(&usuarioEncontrado, nome);
+            result = BuscarUsuarioPorNome(&usuarioEncontrado, nome);
+            if (result == 1)
+            {
+                return;
+            }
 
             printf("=== Usuário ===\n");
             printf("Matrícula : %s\n", usuarioEncontrado.matricula);
@@ -233,19 +226,25 @@ void BuscarUsuarios()
             printf("Digite qualquer tecla para voltar\n");
             _getch();
         }
+
+        // Busca por matricula
         else if (posicaoAtual == 1)
         {
-            // Busca por matricula
             mostrarCursor();
 
             Usuario usuarioEncontrado;
             char matricula[8];
+            int result = 0;
 
             printf("Digite o nome do usuário: ");
             fgets(matricula, 8, stdin);
             matricula[strcspn(matricula, "\n")] = '\0';
 
-            BuscarUsuarioPorMat(&usuarioEncontrado, matricula);
+            result = BuscarUsuarioPorMat(&usuarioEncontrado, matricula);
+            if (result == 1)
+            {
+                return;
+            }
 
             printf("=== Usuário ===\n");
             printf("Matrícula : %s\n", usuarioEncontrado.matricula);
@@ -278,22 +277,12 @@ void EditarUsuario()
     printf("Digite a matrícula do usuário que deseja editar: ");
     scanf("%s", mat);
 
-    for (int i = 0; i < totalUsuarios; i++)
+    BuscarUsuarioPorMat(&usuarioEncontrado, mat);
+    if (usuarioEncontrado.matricula == NULL)
     {
-        if (strcmp(usuarios[i].matricula, mat) == 0)
-        {
-            usuarioEncontrado = usuarios[i];
-            encontrado = 1;
-            break;
-        }
-    }
-
-    if (encontrado != 1)
-    {
-        printf("Usuário com matrícula '%s' não encontrado.\n", mat);
-        _getch();
         return;
     }
+
     ocultarCursor();
     printf("\nUsuário encontrado:\n");
     printf("Matrícula: %s\n", usuarioEncontrado.matricula);
