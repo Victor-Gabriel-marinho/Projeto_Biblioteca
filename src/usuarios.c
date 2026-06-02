@@ -29,7 +29,7 @@ void AddUsers()
         printf("Digite o nome do usuário: ");
         fgets(novoAluno.nome, MAX_STRING, stdin);
         novoAluno.nome[strcspn(novoAluno.nome, "\n")] = '\0'; // Impedindo que o fgets pegue o Enter que o usuários digitar
-        if (strlen(novoAluno.nome) == 0)
+        if (strlen(novoAluno.nome) == 0 || strcmp(novoAluno.nome, " ") == 0)
         {
             printf("Nome inválido! Tente novamente.\n");
         }
@@ -42,7 +42,7 @@ void AddUsers()
         fgets(novoAluno.curso, MAX_STRING, stdin);
         novoAluno.curso[strcspn(novoAluno.curso, "\n")] = '\0';
 
-        if (strlen(novoAluno.curso) == 0)
+        if (strlen(novoAluno.curso) == 0 || strcmp(novoAluno.curso, " ") == 0)
             printf("Curso inválido! Tente novamente.\n");
 
     } while (strlen(novoAluno.curso) == 0 || strcmp(novoAluno.curso, " ") == 0);

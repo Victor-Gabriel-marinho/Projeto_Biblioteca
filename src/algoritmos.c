@@ -66,9 +66,16 @@ int busca_livro(char codigo[8])
 int BuscarUsuarioPorNome(Usuario *usuarioEncontrado, char nome[8])
 {
     int encontrado = 0;
-
+    for (int i = 0; nome[i] != '\0'; i++)
+    {
+        nome[i] = tolower(nome[i]);
+    }
     for (int i = 0; i < totalUsuarios; i++)
     {
+        for (int i = 0; usuarios->nome[i] != '\0'; i++)
+        {
+            usuarios->nome[i] = tolower(usuarios->nome[i]);
+        }
         if (strcmp(nome, usuarios[i].nome) == 0)
         {
             *usuarioEncontrado = usuarios[i];
@@ -233,4 +240,3 @@ void merge_sort_emprestimos_data(Emprestimo *vet, int n)
     // Ordena os empréstimos por data de retirada
     merge_sort_emp_rec(vet, tmp, 0, n - 1);
 }
-
