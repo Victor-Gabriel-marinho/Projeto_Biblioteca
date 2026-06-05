@@ -77,8 +77,8 @@ void addEmp(){ // função pra adicionar emprestimos
 
         while (1)
         {
-        printf("Qual a matricula do usuario? Digite 0 para voltar");
-        scanf("%d ", &matricula_aluno);
+        printf("Qual a matricula do usuario? Digite 0 para voltar: ");
+        scanf("%d", &matricula_aluno);
         if (matricula_aluno == 0){
             return;
         }
@@ -132,7 +132,7 @@ void emp()
     while (1)
     {
         // Função para criar interface
-        int posicaoAtual = criarMenu("TELA DE EMPRESTIMOS", opcoes, 4);
+        int posicaoAtual = criarMenu("TELA DE EMPRESTIMOS", opcoes, 3);
 
         if (posicaoAtual == 0)
         {
