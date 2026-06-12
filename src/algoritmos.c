@@ -71,26 +71,26 @@ int BuscarLivroPorTitulo(Livro *livroEncontrado, char titulo[MAX_STRING])
 // Se o nome não for encontrado, exibe mensagem de erro.
 int BuscarUsuarioPorNome(Usuario *usuarioEncontrado, char nome[8])
 {
+    char temp[100];
 
     for (int i = 0; nome[i] != '\0'; i++)
-    {
         nome[i] = tolower(nome[i]);
-    }
+
     for (int i = 0; i < totalUsuarios; i++)
     {
-        for (int i = 0; usuarios->nome[i] != '\0'; i++)
-        {
-            usuarios->nome[i] = tolower(usuarios->nome[i]);
-        }
-        if (strcmp(nome, usuarios[i].nome) == 0)
+        strcpy(temp, usuarios[i].nome);
+
+        for (int j = 0; temp[j] != '\0'; j++) 
+            temp[j] = tolower(temp[j]);
+
+        if (strcmp(nome, temp) == 0)
         {
             *usuarioEncontrado = usuarios[i];
             return 1;
         }
     }
 
-        return 0;
-    
+    return 0;
 }
 
 // Busca um usuário pela matrícula e copia os dados para usuarioEncontrado.
