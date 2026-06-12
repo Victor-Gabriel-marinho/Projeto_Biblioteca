@@ -41,6 +41,7 @@ typedef struct
 {
     int id;
     char matricula_usuario[8];
+    char codigo_livro[8];
     char data_retirada[11];
     char data_prevista[11];
     char data_devolucao[11];

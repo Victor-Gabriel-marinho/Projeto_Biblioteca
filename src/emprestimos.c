@@ -9,17 +9,12 @@
 #include "../include/Users.h"
 #include "../include/persistencia.h"
 #include "../include/emprestimos.h"
+#include <ctype.h>
 
-int validacao_codigo(char codigo[8])
-{ // função pra checar se o codigo enviado é válido, retorna 0 (false, não é valido) ou retorna 1(true, é valido)
-}
-int validacao_quantidade(int qtd_disponivel)
-{ // função pra     checar se tem quantidade disponivel para emprestmo, retorna 0 (false, não tem) ou retorna 1(true, tem)
-}
-int validacao_usuario(int qtd_usuario)
-{ // função pra     checar se o usuario pode pegar mais um emprestimo, retorna 0 (false, não pode) ou retorna 1(true, pode)
-}
 
+int comp_data(char data1[11], char data2[11]){
+
+}
 
 void listEmp_user(char matricula[8]){
     int c = 1;
@@ -42,8 +37,93 @@ int validEmp_user(int id, char matricula[8], int *posicao_emprestimo){
     }
     return 0;
 }
+void calcular_data(char data[11]){
+    int dia, mes, ano;
 
-void regisEmp(Usuario *pessoa, Livro *livro, Emprestimo *emprestimos){
+    // pega os valores da string
+    sscanf(data, "%2d/%2d/%4d", &dia, &mes, &ano);
+
+    // adiciona 14 dias
+    dia += 14;
+
+    // ajusta meses
+    while(dia > 30){
+
+        dia -= 30;
+        mes++;
+
+        if(mes > 12){
+            mes = 1;
+            ano++;
+        }
+    }
+
+    // sobrescreve a string original
+    sprintf(data, "%02d/%02d/%04d", dia, mes, ano);
+}
+
+
+void ler_data(char data[]){
+
+    int dia, mes, ano;
+    int valida = 0;
+
+    while(valida == 0){
+
+        printf("Digite a data (dd/mm/aaaa): ");
+        scanf("%10s", data);
+
+        // verifica tamanho
+        if(strlen(data) != 10){
+            printf("Data invalida!\n");
+            continue;
+        }
+
+        // verifica barras
+        if(data[2] != '/' || data[5] != '/'){
+            printf("Data invalida!\n");
+            continue;
+        }
+
+        // verifica numeros
+        int erro = 0;
+
+        for(int i = 0; i < 10; i++){
+
+            if(i == 2 || i == 5)
+                continue;
+
+            if(!isdigit(data[i])){
+                erro = 1;
+                break;
+            }
+        }
+
+        if(erro){
+            printf("Data invalida!\n\n");
+            continue;
+        }
+
+        // converte
+        sscanf(data, "%2d/%2d/%4d", &dia, &mes, &ano);
+
+        // verifica dia
+        if(dia < 1 || dia > 31){
+            printf("Dia invalido!\n\n");
+            continue;
+        }
+
+        // verifica mes
+        if(mes < 1 || mes > 12){
+            printf("Mes invalido!\n\n");
+            continue;
+        }
+
+        valida = 1;
+    }
+}
+
+void regisEmp(Usuario *pessoa, Livro *livro, Emprestimo *emprestimos, char data[10]){
     Emprestimo *temp = realloc(emprestimos, (totalEmprestimos + 1) * sizeof(Emprestimo));
             if (temp == NULL)
             {
@@ -52,8 +132,19 @@ void regisEmp(Usuario *pessoa, Livro *livro, Emprestimo *emprestimos){
                 return;
             }
             emprestimos = temp;
-            //Emprestimo novo = {gerarID};
-            //emprestimos[totalEmprestimos] = {}
+            char data_temp[11];
+            strcpy(data_temp, data);
+            calcular_data(data_temp);
+            Emprestimo novo;
+            novo.id = totalEmprestimos + 1;
+            strcpy(novo.matricula_usuario, pessoa->matricula);
+            strcpy(novo.codigo_livro, livro->codigo);
+            strcpy(novo.data_retirada, data);
+            strcpy(novo.data_prevista, data_temp);
+            strcpy(novo.data_devolucao, "ND");
+            novo.devolvido =0;
+            emprestimos[totalEmprestimos] = novo;
+            
 }
 
 void regDev(){ // função pra registrar devoluções 
@@ -62,6 +153,7 @@ void regDev(){ // função pra registrar devoluções
     int qtd_emprestimo;
     int posicao_emprestimo;
     char matricula_aluno[8];
+    Livro livro;
     while(1){ // loop central da função 
 
         mostrarCursor();
@@ -85,8 +177,11 @@ void regDev(){ // função pra registrar devoluções
                 printf("O usuario possui %d emprestimos ativos, quais desses voce quer registrar devolucao (Escreva o id de emprestimo)? ", pessoa.qtd_emprestimos_ativos);
                 listEmp_user(matricula_aluno);
                 scanf("%d", &remover);
+
                 if(validEmp_user(remover, matricula_aluno, &posicao_emprestimo) == 1){
-                    
+                    char codigo_temp[8];
+                    strcpy(codigo_temp, emprestimos[posicao_emprestimo].codigo_livro);
+                    busca_livroCodigo(&livro, codigo_temp);
                     for(int i = posicao_emprestimo; i < totalEmprestimos -1; i++){
                         emprestimos[i] = emprestimos[i+1];
                     }
@@ -96,6 +191,7 @@ void regDev(){ // função pra registrar devoluções
                 }
                 if(validEmp_user(remover, matricula_aluno, &posicao_emprestimo) == 0){ 
                     printf("O emprestimo selecionado não existe ou não pertence ao usuario selecionado!");
+                    continue;
                 }
 
             }
@@ -108,6 +204,7 @@ void listEmp_atraso(){ // função pra listar emprestimos em atraso
 }
 
 
+
 void addEmp(){ // função pra adicionar emprestimos
     Usuario pessoa;
     char matricula_aluno[8]; // variavel local da matricula do aluno na execucao atual
@@ -115,19 +212,17 @@ void addEmp(){ // função pra adicionar emprestimos
     int qtd_disponivel;
     int qtd_usuario;
     int posicao;
-    Livro *livro;
+    char data_emp[11];
+    Livro livro;
 
         while (1)
         {
             mostrarCursor();
         printf("Qual a matricula do usuario? Digite 0 para voltar: ");
-        fgets(matricula_aluno, 8, stdin);
-
-        if (strcmp(matricula_aluno, "0\n") == 0){
+        scanf("%7s", matricula_aluno);
+        if (strcmp(matricula_aluno, "0") == 0){
             return;
         }
-        else{
-            matricula_aluno[strlen(matricula_aluno)-1]= '\n';
             if (BuscarUsuarioPorMat(&pessoa, matricula_aluno) == 0)
             { // Válida se a matricula escrita é valida por meio da função, se for valida ele só continua, se for invalida ele diz que é invalida e volta pro começo do while principal.
                 printf("Matricula invalida! Digite uma matricula valida. \n");
@@ -135,43 +230,47 @@ void addEmp(){ // função pra adicionar emprestimos
             }
             else{
                 if(pessoa.qtd_emprestimos_ativos == 3){
-                    printf("O usuário já possui 3 emprestimos ativos e não pode registrar um novo.\n");
+                    printf("O usuário já possui 3 emprestimos ativos e não pode registrar um novo. \n");
                     system("pause");
                     return;
-                }
-            }
-        }}
-        while (1)
-        { // While pra checar se o codigo escrito é válido, ele fica no loop ate que a função validacao seja verdadeira.
-        printf("Qual o codigo do livro? Digite 0 para volta\n");
-        scanf("%s", codigo);
-        if(codigo == 0){
-            return;
-        }
-            if(busca_livroCodigo(livro, codigo) == 0)
-            {
-                printf("Codigo de livro invalido! Digite um codigo válido de livro. \n");
-                system("pause");
-                continue;
-            }
-            else
-            {
-                if(livro->qtd_disponivel == 0){
-                    printf("Não tem estoque disponivel para o livro selecionado. Escolha outro livro.\n");
-                    system("pause");
-                    continue;
                 }
                 else{
-                    printf("Emprestimo registrado com sucesso!\n");
-                    regisEmp(&pessoa, livro, emprestimos);
-                    system("pause");
-                    return;
+                    break;
                 }
-                
             }
         }
+        while (1)
+        { // While pra checar se o codigo escrito é válido, ele fica no loop ate que a função validacao seja verdadeira.
+        printf("Qual o codigo do livro? Digite 0 para voltar");
+        scanf("%7s", codigo);
+        if(strcmp(codigo, "0") == 0){
+            return;
+        }
+        if(busca_livroCodigo(&livro, codigo) == 0)
+        {
+            printf("Codigo de livro invalido! Digite um codigo válido de livro. \n");
+            continue;
+        }
 
+        if(livro.qtd_disponivel == 0){
+         printf("Não tem estoque disponivel para o livro selecionado. Escolha outro livro.\n");
+                continue;
+            }
+            else{
+                
+                printf("Qual o dia que o emprestimo foi feito? (Digite no formato dd/mm/aaaa)");
+                scanf("%10s", data_emp);
+                ler_data(data_emp);
+                regisEmp(&pessoa, &livro, emprestimos, data_emp);
+                totalEmprestimos++;
+                printf("Emprestimo registrado com sucesso!\n");
+                system("pause");
+                return;
+            }
+        }
 }
+
+
 
 void emp()
 {
