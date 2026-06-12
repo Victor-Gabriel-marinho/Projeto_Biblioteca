@@ -32,7 +32,6 @@ int busca_livroCodigo(Livro *livroEncontrado, char codigo[8])
         {
             *livroEncontrado = livros[i];
             encontrado = 1;
-            system("pause");
             return 1;
         }
     }
@@ -62,7 +61,7 @@ int BuscarLivroPorTitulo(Livro *livroEncontrado, char titulo[MAX_STRING])
         }
     }
 
-        system("pause");
+
         return 0;
     
 }
@@ -90,7 +89,6 @@ int BuscarUsuarioPorNome(Usuario *usuarioEncontrado, char nome[8])
         }
     }
 
-        system("pause");
         return 0;
     
 }
@@ -105,8 +103,6 @@ int BuscarUsuarioPorMat(Usuario *usuarioEncontrado, char matricula[8])
         if (strcmp(matricula, usuarios[i].matricula) == 0)
         {
             *usuarioEncontrado = usuarios[i];
-
-            system("pause");
             return 1;
         }
     }

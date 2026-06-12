@@ -43,14 +43,22 @@ int validEmp_user(int id, char matricula[8], int *posicao_emprestimo){
     return 0;
 }
 
-void regisEmp(Usuario *pessoa, Livro *livro){
-    pessoa
-
+void regisEmp(Usuario *pessoa, Livro *livro, Emprestimo *emprestimos){
+    Emprestimo *temp = realloc(emprestimos, (totalEmprestimos + 1) * sizeof(Emprestimo));
+            if (temp == NULL)
+            {
+                printf("Erro: falha ao alocar memória! Emprestimo não foi registrado.\n");
+                free(emprestimos);
+                return;
+            }
+            emprestimos = temp;
+            //Emprestimo novo = {gerarID};
+            //emprestimos[totalEmprestimos] = {}
 }
 
 void regDev(){ // função pra registrar devoluções 
     int posicao_usuario;
-    Usuario *pessoa;
+    Usuario pessoa;
     int qtd_emprestimo;
     int posicao_emprestimo;
     char matricula_aluno[8];
@@ -59,22 +67,22 @@ void regDev(){ // função pra registrar devoluções
         mostrarCursor();
         printf("Qual a matricula do usuario que voce deseja registrar a devolucao? Digite 0 pra voltar: ");
         scanf("%s", matricula_aluno);
-
-        if(matricula_aluno == "0"){
+        printf("%d",BuscarUsuarioPorMat(&pessoa, matricula_aluno));
+        if(strcmp(matricula_aluno, "0") == 0){
             return;
         }
         else{
-            if(BuscarUsuarioPorMat(pessoa, matricula_aluno) == 0){
+            if(BuscarUsuarioPorMat(&pessoa, matricula_aluno) == 0){
                 printf("Matricula invalida! Digite uma matricula valida.");
                 continue;
             }
             else{
                 int remover;
-                if(pessoa->qtd_emprestimos_ativos == 0){
+                if(pessoa.qtd_emprestimos_ativos == 0){
                     printf("O usario não possui emprestimos ativos. Escolha outro");
                     continue;
                 }
-                printf("O usuario possui %d emprestimos ativos, quais desses voce quer registrar devolucao (Escreva o id de emprestimo)? ", pessoa->qtd_emprestimos_ativos);
+                printf("O usuario possui %d emprestimos ativos, quais desses voce quer registrar devolucao (Escreva o id de emprestimo)? ", pessoa.qtd_emprestimos_ativos);
                 listEmp_user(matricula_aluno);
                 scanf("%d", &remover);
                 if(validEmp_user(remover, matricula_aluno, &posicao_emprestimo) == 1){
@@ -101,7 +109,7 @@ void listEmp_atraso(){ // função pra listar emprestimos em atraso
 
 
 void addEmp(){ // função pra adicionar emprestimos
-    Usuario *pessoa;
+    Usuario pessoa;
     char matricula_aluno[8]; // variavel local da matricula do aluno na execucao atual
     char codigo[8];      // variavel local de codigo do livro
     int qtd_disponivel;
@@ -111,20 +119,23 @@ void addEmp(){ // função pra adicionar emprestimos
 
         while (1)
         {
+            mostrarCursor();
         printf("Qual a matricula do usuario? Digite 0 para voltar: ");
-        scanf("%s", matricula_aluno);
-        if (matricula_aluno == "0"){
+        fgets(matricula_aluno, 8, stdin);
+
+        if (strcmp(matricula_aluno, "0\n") == 0){
             return;
         }
         else{
-            if (BuscarUsuarioPorMat(pessoa, matricula_aluno) == 0)
+            matricula_aluno[strlen(matricula_aluno)-1]= '\n';
+            if (BuscarUsuarioPorMat(&pessoa, matricula_aluno) == 0)
             { // Válida se a matricula escrita é valida por meio da função, se for valida ele só continua, se for invalida ele diz que é invalida e volta pro começo do while principal.
                 printf("Matricula invalida! Digite uma matricula valida. \n");
                 continue;
             }
             else{
-                if(pessoa->qtd_emprestimos_ativos == 3){
-                    printf("O usuário já possui 3 emprestimos ativos e não pode registrar um novo.");
+                if(pessoa.qtd_emprestimos_ativos == 3){
+                    printf("O usuário já possui 3 emprestimos ativos e não pode registrar um novo.\n");
                     system("pause");
                     return;
                 }
@@ -132,26 +143,27 @@ void addEmp(){ // função pra adicionar emprestimos
         }}
         while (1)
         { // While pra checar se o codigo escrito é válido, ele fica no loop ate que a função validacao seja verdadeira.
-        printf("Qual o codigo do livro? Digite 0 para voltar");
+        printf("Qual o codigo do livro? Digite 0 para volta\n");
         scanf("%s", codigo);
         if(codigo == 0){
             return;
         }
-            if(busca_livro(codigo, livro) == 0)
+            if(busca_livroCodigo(livro, codigo) == 0)
             {
                 printf("Codigo de livro invalido! Digite um codigo válido de livro. \n");
+                system("pause");
                 continue;
             }
             else
             {
                 if(livro->qtd_disponivel == 0){
-                    printf("Não tem estoque disponivel para o livro selecionado. Escolha outro livro.");
+                    printf("Não tem estoque disponivel para o livro selecionado. Escolha outro livro.\n");
                     system("pause");
                     continue;
                 }
                 else{
-                    printf("Emprestimo registrado com sucesso!");
-                    regisEmp(pessoa, livro);
+                    printf("Emprestimo registrado com sucesso!\n");
+                    regisEmp(&pessoa, livro, emprestimos);
                     system("pause");
                     return;
                 }

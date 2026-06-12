@@ -16,5 +16,3 @@ void BuscarCodigoDoLivro();
 void RemoveLivros();
 void BuscarPorNomeDoLivro();
 void Livros();
-int busca_livroCodigo();
-int BuscarLivroPorTitulo();
