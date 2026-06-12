@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include "../include/livros.h"
 
 
 
@@ -27,9 +28,9 @@ int busca_livroCodigo(Livro *livroEncontrado, char codigo[8])
     int encontrado = 0;
     for (int i = 0; i < totalLivros; i++)
     {
-        if (strcmp(matricula, usuarios[i].matricula) == 0)
+        if (strcmp(codigo, livros[i].codigo) == 0)
         {
-            *usuarioEncontrado = usuarios[i];
+            *livroEncontrado = livros[i];
             encontrado = 1;
             system("pause");
             return 1;
