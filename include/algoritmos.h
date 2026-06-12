@@ -17,7 +17,7 @@ int BuscarUsuarioPorNome(Usuario *usuarioEncontrado,char nome[8]);
 int BuscarUsuarioPorMat(Usuario *usuarioEncontrado,char matricula[8]);
 int PegarIndiceUsuario(char matricula[8]);
 int PegarIndiceLivro(char codigo[8]);
-
+void data_hoje(char data[11]);
 // Função para ordenar os livros por título usando merge sort
 void merge_sort_livros(Livro *saida, int n);
 

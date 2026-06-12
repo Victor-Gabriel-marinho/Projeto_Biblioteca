@@ -14,7 +14,28 @@
 
 int comp_data(char data1[11], char data2[11])
 {
+    int d1, m1, a1;
+    int d2, m2, a2;
+
+    // extrai dia, mês e ano
+    sscanf(data1, "%d/%d/%d", &d1, &m1, &a1);
+    sscanf(data2, "%d/%d/%d", &d2, &m2, &a2);
+
+    // compara ano
+    if (a1 > a2) return 1;
+    if (a1 < a2) return -1;
+
+    // compara mês
+    if (m1 > m2) return 1;
+    if (m1 < m2) return -1;
+
+    // compara dia
+    if (d1 > d2) return 1;
+    if (d1 < d2) return -1;
+
+    return 0;
 }
+
 
 void listEmp_user(char matricula[8])
 {
@@ -178,7 +199,7 @@ void regisEmp(Usuario *pessoa, Livro *livro, char data[10])
     novo.devolvido = 0;
     emprestimos[totalEmprestimos] = novo;
     totalEmprestimos++;
-    
+
     printf("%d",totalEmprestimos);
     system("pause");
 
@@ -257,6 +278,14 @@ void regDev()
 
 void listEmp_atraso()
 { // função pra listar emprestimos em atraso
+    char today[11];
+    data_hoje(today);
+    for(int i = 0; i < totalEmprestimos; i++){
+        printf("EMPRESTIMOS ATRASADOS: \n");
+        if(comp_data(emprestimos[i].data_prevista, today) == 1){
+            printf("ID: %d\n Matricula:%7s\n Codigo do livro: %7s\nData de Retirada: %10s\n Data prevista: %10s\n", emprestimos[i].id, emprestimos[i].codigo_livro, emprestimos[i].data_retirada, emprestimos[i].data_prevista);
+        }
+    }
 }
 
 void addEmp()
@@ -334,11 +363,14 @@ void emp()
 {
 
     char opcoes[3][30] = {"Registrar emprestimo", "Listar emprestimos em atraso", "Voltar"};
-
+    char data[11];
+    
+    
     while (1)
     {
         // Função para criar interface
         int posicaoAtual = criarMenu("TELA DE EMPRESTIMOS", opcoes, 3);
+    
 
         if (posicaoAtual == 0)
         {
@@ -348,7 +380,7 @@ void emp()
         else if (posicaoAtual == 1)
         {
             // Função de buscar usuarios por nome ou matricula
-            listarEmp();
+            listEmp_atraso();
         }
         else if (posicaoAtual == 2)
         {

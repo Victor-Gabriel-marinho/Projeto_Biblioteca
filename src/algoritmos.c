@@ -5,7 +5,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "../include/livros.h"
-
+#include <time.h>
 
 
 // Função para gerar matricula automaticamente
@@ -18,6 +18,15 @@ void gerarID(char *buffer)
     }
 
     buffer[MAX_MAT + 1] = '\0';
+}
+void data_hoje(char data[11]) {
+    time_t agora = time(NULL);
+    struct tm *info = localtime(&agora);
+
+    sprintf(data, "%02d/%02d/%04d",
+            info->tm_mday,
+            info->tm_mon + 1,
+            info->tm_year + 1900);
 }
 
 /*busca binaria para encontrar o livro pelo codigo,
