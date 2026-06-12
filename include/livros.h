@@ -6,6 +6,9 @@
 #include "../include/interface.h"
 #include "../include/biblioteca.h"
 
+extern Livro *livros;
+extern int totalLivros;
+
 void AddLivros();
 void EditLivros();
 void ListLivros();

@@ -7,6 +7,7 @@
 #include "../include/biblioteca.h"
 #include "../include/algoritmos.h"
 #include "../include/persistencia.h"
+#include "../include/livros.h"
 #include <string.h>
 
 void AddLivros()
@@ -111,16 +112,20 @@ void AddLivros()
         }
         else if (tecla == 13)
         {
-            FILE *livros = fopen("data\\livros.dat", "ab");
-
-            if (livros == NULL)
+           
+            Livro *temp = realloc(livros, (totalLivros + 1) * sizeof(Livro));
+            if (temp == NULL)
             {
-                printf("Erro ao abrir o arquivo");
-                _getch();
+                printf("Erro: falha ao alocar memória!\n");
+                free(livros);
                 return;
             }
-            fwrite(&novoLivro, sizeof(Livro), 1, livros);
-            fclose(livros);
+
+            livros = temp;
+            livros[totalLivros] = novoLivro;
+            totalLivros++;
+
+            SalvarLivros(livros, totalLivros);   
             printf("\nLivro salvo com sucesso!\nPressione qualquer tecla para sair\n");
             _getch();
             system("cls");
@@ -175,6 +180,7 @@ void listLivros()
     }
     system("Pause");
 }
+
 
 // void RemoverUsuario()
 // {
