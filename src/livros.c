@@ -511,7 +511,7 @@ void Livros()
         else if (posicaoAtual == 1)
         {
             // Função de listar livros
-
+            listLivros();
             
         }
         else if (posicaoAtual == 2)

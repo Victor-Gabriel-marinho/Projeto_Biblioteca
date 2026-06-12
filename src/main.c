@@ -15,11 +15,14 @@ Usuario *usuarios = NULL;
 int totalUsuarios = 0;
 int totalEmprestimos = 0;
 Emprestimo *emprestimos = NULL;
+int totalLivros = 0;
+Livro *livros = NULL;   
 
 int main()
 {
     usuarios = CarregarUsuarios(&totalUsuarios);
     emprestimos = CarregarEmprestimos(&totalEmprestimos);
+    livros = CarregarLivros(&totalLivros);
     // Definindo as opções do Menu principal
     char opcoes[6][30] = {"Gerenciar Usuários", "Gerenciar Livros", "Realizar Empréstimos", "Registrar devolução", "Relatórios", "Sair"};
 

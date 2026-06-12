@@ -11,4 +11,7 @@ void SalvarUsuarios (Usuario *usuarios, int totalusu);
 Emprestimo *CarregarEmprestimos(int *total);
 void SalvarEmprestimos(Emprestimo *emprestimos, int totalemp);
 
+Livro *CarregarLivros(int *total);
+void SalvarLivros(Livro *livros, int totalLivros);
+
 #endif
