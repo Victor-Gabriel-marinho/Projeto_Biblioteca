@@ -45,7 +45,7 @@ int main()
         }
         else if (posicaoAtual == 3)
         {
-            regDev;
+            regDev();
         }
         else if (posicaoAtual == 3)
         {
