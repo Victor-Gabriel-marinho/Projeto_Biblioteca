@@ -1,165 +1,165 @@
-// #include <stdio.h>
-// #include <windows.h>
-// #include <conio.h>
-// #include <stdlib.h>
-// #include <time.h>
-// #include "../include/interface.h"
-// #include "../include/livros.h"
-// #include "../include/biblioteca.h"
-// #include "../include/algoritmos.h"
-// #include "../include/persistencia.h"
-// #include <string.h>
+#include <stdio.h>
+#include <windows.h>
+#include <conio.h>
+#include <stdlib.h>
+#include <time.h>
+#include "../include/interface.h"
+#include "../include/biblioteca.h"
+#include "../include/algoritmos.h"
+#include "../include/persistencia.h"
+#include <string.h>
 
-// void AddLivros()
+void AddLivros()
+{
+    srand(time(NULL));
+    char tecla;
+    Livro novoLivro;
+
+    gerarID(novoLivro.codigo);
+    novoLivro.qtd_disponivel = 0;
+
+    printf("=== ADICIONAR LIVRO ===\n\n");
+    mostrarCursor(); 
+
+    do
+    {
+        printf("Digite o título do livro: ");
+        fgets(novoLivro.titulo, MAX_STRING, stdin);
+        novoLivro.titulo[strcspn(novoLivro.titulo, "\n")] = '\0';
+        if (strlen(novoLivro.titulo) == 0)
+        {
+            printf("Título inválido! Tente novamente.\n");
+        }
+    } while (strlen(novoLivro.titulo) == 0 || strcmp(novoLivro.titulo, " ") == 0);
+
+    do
+    {
+        printf("Digite o nome do autor: ");
+        fgets(novoLivro.autor, MAX_STRING, stdin);
+        novoLivro.autor[strcspn(novoLivro.autor, "\n")] = '\0';
+        if (strlen(novoLivro.autor) == 0)
+        {
+            printf("Autor inválido! Tente novamente.\n");
+        }
+    } while (strlen(novoLivro.autor) == 0 || strcmp(novoLivro.autor, " ") == 0);
+
+    {
+        int ano = 0;
+        int ano_valido = 0;
+
+        do
+        {
+            printf("Digite o ano do livro: ");
+            scanf("%d", &novoLivro.ano);  
+            if (novoLivro.ano == 0)
+            {
+                printf("Ano inválido! Tente novamente.\n");
+            }
+            else
+            {
+                ano_valido = 1;
+            }
+        } while (!ano_valido);
+    }
+
+    do
+    {
+        printf("Digite o gênero do livro: ");
+        fgets(novoLivro.genero, MAX_STRING, stdin);
+        novoLivro.genero[strcspn(novoLivro.genero, "\n")] = '\0';
+
+        if (strlen(novoLivro.genero) == 0)
+            printf("Gênero inválido! Tente novamente.\n");
+    } while (strlen(novoLivro.genero) == 0 || strcmp(novoLivro.genero, " ") == 0);
+
+    
+        int qtd_total = 0;
+        int qtd_valida = 0;
+
+        do
+        {
+            printf("Digite a quantidade total de exemplares do livro: ");
+            scanf("%d", &novoLivro.qtd_total);   
+            if (novoLivro.qtd_total == 0)
+            {
+                printf("Quantidade inválida! Tente novamente.\n");
+            }
+            else
+            {
+                qtd_valida = 1;
+            }
+        } while (!qtd_valida);
+   
+
+    while (1)
+    {
+        ocultarCursor();
+        printf("=== Livro ===\n");
+        printf("Código    : %s\n", novoLivro.codigo);
+        printf("Título    : %s\n", novoLivro.titulo);
+        printf("Autor     : %s\n", novoLivro.autor);
+        printf("Ano       : %zu\n", novoLivro.ano);
+        printf("Gênero    : %s\n", novoLivro.genero);
+        printf("Disponível: %d\n\n", novoLivro.qtd_total);
+        printf("Pressione Enter para confirmar ou BackSpace para voltar");
+        tecla = _getch();
+
+        if (tecla == 8)
+        {
+            system("cls");
+            break;
+        }
+        else if (tecla == 13)
+        {
+            FILE *livros = fopen("data\\livros.dat", "ab");
+
+            if (livros == NULL)
+            {
+                printf("Erro ao abrir o arquivo");
+                _getch();
+                return;
+            }
+            fwrite(&novoLivro, sizeof(Livro), 1, livros);
+            fclose(livros);
+            printf("\nLivro salvo com sucesso!\nPressione qualquer tecla para sair\n");
+            _getch();
+            system("cls");
+            break;
+        }
+    }
+}
+// void listLivros()
 // {
-//     srand(time(NULL));
-//     char tecla;
-//     Livro novoLivro;
 
-//     // Função de gerar o codigo do livro automaticamente
-//     gerarID(novoLivro.codigo);
-//     novoLivro.qtd_disponivel = 0;
+//     printf("\t\t\t=== LISTA DE LIVROS ===\n\n");
 
-//     printf("=== ADICIONAR LIVRO ===\n\n");
-//     mostrarCursor();
-
-//     do
+//     // Percorrendo o vetor de livros
+//     for (int i = 0; i < totalUsuarios; i += 3)
 //     {
+//         int colunas = totalUsuarios - i;
+//         if (colunas > 3)
+//             colunas = 3;
 
-//         printf("Digite o título do livro: ");
-//         fgets(novoLivro.titulo, MAX_STRING, stdin);
-//         novoLivro.titulo[strcspn(novoLivro.titulo, "\n")] = '\0'; // Impedindo que o fgets pegue o Enter que o usuários digitar
-//         if (strlen(novoLivro.titulo) == 0)
-//         {
-//             printf("Título inválido! Tente novamente.\n");
-//         }
+//         for (int c = 0; c < colunas; c++)
+//             printf("=== Usuário %d ===\t\t", i + c + 1);
+//         printf("\n");
 
-//     } while (strlen(novoLivro.titulo) == 0);
+//         for (int c = 0; c < colunas; c++)
+//             printf("Matrícula : %-20s", usuarios[i + c].matricula);
+//         printf("\n");
 
-//     do
-//     {
-//         printf("Digite o nome do autor: ");
-//         fgets(novoLivro.autor, MAX_STRING, stdin);
-//         novoLivro.autor[strcspn(novoLivro.autor, "\n")] = '\0';
+//         for (int c = 0; c < colunas; c++)
+//             printf("Nome      : %-20s", usuarios[i + c].nome);
+//         printf("\n");
 
-//         if (strlen(novoLivro.autor) == 0)
-//             printf("Autor inválido! Tente novamente.\n");
+//         for (int c = 0; c < colunas; c++)
+//             printf("Curso     : %-20s", usuarios[i + c].curso);
+//         printf("\n");
 
-//     } while (strlen(novoLivro.autor) == 0);
-
-//     {
-//         char ano_str[MAX_STRING];
-//         int ano_valido = 0;
-
-//         do
-//         {
-//             printf("Digite o ano do livro: ");
-//             fgets(ano_str, MAX_STRING, stdin);
-//             ano_str[strcspn(ano_str, "\n")] = '\0';
-
-//             if (strlen(ano_str) == 0)
-//             {
-//                 printf("Ano inválido! Tente novamente.\n");
-//             }
-//             else
-//             {
-//                 char *endptr;
-//                 long ano_convertido = strtol(ano_str, &endptr, 10);
-
-//                 if (*endptr != '\0' || ano_convertido <= 0)
-//                 {
-//                     printf("Ano inválido! Tente novamente.\n");
-//                 }
-//                 else
-//                 {
-//                     novoLivro.ano = (size_t)ano_convertido;
-//                     ano_valido = 1;
-//                 }
-//             }
-//         } while (!ano_valido);
+//         for (int c = 0; c < colunas; c++)
+//             printf("Empréstimos ativos: %-5d\t", usuarios[i + c].qtd_emprestimos_ativos);
+//         printf("\n\n");
 //     }
-
-//     do
-//     {
-//         printf("Digite o gênero do livro: ");
-//         fgets(novoLivro.genero, MAX_STRING, stdin);
-//         novoLivro.genero[strcspn(novoLivro.genero, "\n")] = '\0';
-
-//         if (strlen(novoLivro.genero) == 0)
-//             printf("Gênero inválido! Tente novamente.\n");
-//     } while (strlen(novoLivro.genero) == 0);
-
-//     while (1)
-//     {
-//         ocultarCursor();
-//         printf("=== Livro ===\n");
-//         printf("Código    : %s\n", novoLivro.codigo);
-//         printf("Título    : %s\n", novoLivro.titulo);
-//         printf("Autor     : %s\n", novoLivro.autor);
-//         printf("Ano       : %zu\n", novoLivro.ano);
-//         printf("Gênero    : %s\n", novoLivro.genero);
-//         printf("Disponível: %d\n\n", novoLivro.qtd_disponivel);
-//         printf("Pressione Enter para confirmar ou BackSpace para voltar");
-//         tecla = _getch();
-
-//         if (tecla == 8)
-//         {
-//             system("cls");
-//             break;
-//         }
-//         else if (tecla == 13)
-//         {
-//             FILE *livros = fopen("data\\livros.dat", "ab");
-
-//             if (livros == NULL)
-//             {
-//                 printf("Erro ao abrir o arquivo");
-//                 _getch();
-//                 return;
-//             }
-//             fwrite(&novoLivro, sizeof(Livro), 1, livros);
-//             fclose(livros);
-//             printf("\nLivro salvo com sucesso!\nPressione qualquer tecla para sair\n");
-//             _getch();
-//             system("cls");
-//             break;
-//         }
-//     }
-// }
-
-// void ListLivros()
-// {
-//     FILE *arquivo = fopen("data\\livros.dat", "rb");
-//     if (arquivo == NULL)
-//     {
-//         printf("Não foi possível abrir o arquivo de livros.\n");
-//         _getch();
-//         return;
-//     }
-
-//     Livro livro;
-//     int contador = 0;
-
-//     while (fread(&livro, sizeof(Livro), 1, arquivo) == 1)
-//     {
-//         contador++;
-//         printf("=== Livro %d ===\n", contador);
-//         printf("Código    : %s\n", livro.codigo);
-//         printf("Título    : %s\n", livro.titulo);
-//         printf("Autor     : %s\n", livro.autor);
-//         printf("Ano       : %d\n", livro.ano);
-//         printf("Gênero    : %s\n", livro.genero);
-//         printf("Quantidade total     : %d\n", livro.qtd_total);
-//         printf("Quantidade disponível: %d\n", livro.qtd_disponivel);
-//         printf("Total de empréstimos : %d\n\n", livro.total_emprestimos);
-//     }
-
-//     if (contador == 0)
-//     {
-//         printf("Nenhum livro encontrado.\n");
-//     }
-
-//     fclose(arquivo);
 //     system("Pause");
 // }
 
@@ -473,47 +473,48 @@
 //     system("cls");
 // }
 
-// void Livros()
-// {
+void Livros()
+{
 
-//     // Criando opções da tela de gerenciamento de usuários
-//     char opcoes[6][30] = {"Adicionar Usuário", "Listar Usuários", "Buscar usuário", "Remover Usuário", "Editar usuário", "Voltar"};
+    // Criando opções da tela de gerenciamento de livros
+    char opcoes[6][30] = {"Adicionar Livro", "Listar Livros", "Buscar Livro", "Remover Livro", "Editar Livro", "Voltar"};
 
-//     while (1)
-//     {
-//         // Função para criar interface
-//         int posicaoAtual = criarMenu("TELA DE USUÁRIOS", opcoes, 6);
+    while (1)
+    {
+        // Função para criar interface
+        int posicaoAtual = criarMenu("TELA DE LIVROS", opcoes, 6);
 
-//         if (posicaoAtual == 0)
-//         {
-//             // Função de adicionar usuários
+        if (posicaoAtual == 0)
+        {
+            // Função de adicionar livros
+           AddLivros(); 
+        }
+        else if (posicaoAtual == 1)
+        {
+            // Função de listar livros
+
             
-//         }
-//         else if (posicaoAtual == 1)
-//         {
-//             // Função de listar usuários
+        }
+        else if (posicaoAtual == 2)
+        {
+            // Função de buscar usuarios por nome ou matricula
             
-//         }
-//         else if (posicaoAtual == 2)
-//         {
-//             // Função de buscar usuarios por nome ou matricula
+        }
+        else if (posicaoAtual == 3)
+        {
+            // Função de remover usuario através da matrícula
             
-//         }
-//         else if (posicaoAtual == 3)
-//         {
-//             // Função de remover usuario através da matrícula
+        }
+        else if (posicaoAtual == 4)
+        {
+            // Função de editar usuario através da matrícula
             
-//         }
-//         else if (posicaoAtual == 4)
-//         {
-//             // Função de editar usuario através da matrícula
-            
-//         }
-//         else if (posicaoAtual == 5)
-//         {
-//             system("cls");
-//             break;
-//         }
-//         system("cls");
-//     }
-// }
+        }
+        else if (posicaoAtual == 5)
+        {
+            system("cls");
+            break;
+        }
+        system("cls");
+    }
+}

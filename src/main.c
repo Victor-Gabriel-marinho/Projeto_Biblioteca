@@ -34,7 +34,7 @@ int main()
         }
         else if (posicaoAtual == 1)
         {
-            printf("Livros.\n");
+            Livros();
         }
         else if (posicaoAtual == 2)
         {
