@@ -128,40 +128,53 @@ void AddLivros()
         }
     }
 }
-// void listLivros()
-// {
+void listLivros()
+{
 
-//     printf("\t\t\t=== LISTA DE LIVROS ===\n\n");
+    printf("\t\t\t=== LISTA DE LIVROS ===\n\n");
 
-//     // Percorrendo o vetor de livros
-//     for (int i = 0; i < totalUsuarios; i += 3)
-//     {
-//         int colunas = totalUsuarios - i;
-//         if (colunas > 3)
-//             colunas = 3;
+    // Percorrendo o vetor de livros
+    for (int i = 0; i < totalLivros; i += 3)
+    {
+        int colunas = totalLivros - i;
+        if (colunas > 3)
+            colunas = 3;
 
-//         for (int c = 0; c < colunas; c++)
-//             printf("=== Usuário %d ===\t\t", i + c + 1);
-//         printf("\n");
+        for (int c = 0; c < colunas; c++)
+            printf("=== Livro %d ===\t\t", i + c + 1);
+        printf("\n");
 
-//         for (int c = 0; c < colunas; c++)
-//             printf("Matrícula : %-20s", usuarios[i + c].matricula);
-//         printf("\n");
+        for (int c = 0; c < colunas; c++)
+            printf("Código : %-20s", livros[i + c].codigo);
+        printf("\n");
 
-//         for (int c = 0; c < colunas; c++)
-//             printf("Nome      : %-20s", usuarios[i + c].nome);
-//         printf("\n");
+        for (int c = 0; c < colunas; c++)
+            printf("Título : %-20s", livros[i + c].titulo);
+        printf("\n");
 
-//         for (int c = 0; c < colunas; c++)
-//             printf("Curso     : %-20s", usuarios[i + c].curso);
-//         printf("\n");
+        for (int c = 0; c < colunas; c++)
+            printf("Autor : %-20s", livros[i + c].autor);
+        printf("\n");
 
-//         for (int c = 0; c < colunas; c++)
-//             printf("Empréstimos ativos: %-5d\t", usuarios[i + c].qtd_emprestimos_ativos);
-//         printf("\n\n");
-//     }
-//     system("Pause");
-// }
+        for (int c = 0; c < colunas; c++)
+            printf("Ano : %-5d\t", livros[i + c].ano);
+        printf("\n\n");
+
+        for (int c = 0; c < colunas; c++)
+            printf("Gênero : %-5s\t", livros[i + c].genero);
+        printf("\n\n");
+
+        for (int c = 0; c < colunas; c++)
+            printf("Quantidade total: %-5d\t", livros[i + c].qtd_total);
+        printf("\n\n");
+
+        
+        for (int c = 0; c < colunas; c++)
+            printf("Quantidade disponível: %-5d\t", livros[i + c].qtd_total);
+        printf("\n\n");
+    }
+    system("Pause");
+}
 
 // void RemoverUsuario()
 // {
