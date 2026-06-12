@@ -32,17 +32,27 @@ int validacao_usuario(int qtd_usuario)
 
 
 void listEmp_user(char matricula[8]){
+    int c = 1;
     for(int i = 0; i < totalEmprestimos; i++){
         if(strcmp(emprestimos[i].matricula_usuario, matricula) == 0){
             printf("Emprestimos de %s: \n", emprestimos[i].matricula_usuario);
             if(emprestimos[i].devolvido ==0){
-            printf("ID: %d\nData do emprestimo: %s\nData prevista de devolucao: %s\n", emprestimos[i].id, emprestimos[i].data_retirada, emprestimos[i].data_prevista);}
+            printf("%d: \nID: %d\nData do emprestimo: %s\nData prevista de devolucao: %s\n", c, emprestimos[i].id, emprestimos[i].data_retirada, emprestimos[i].data_prevista);
+            c++;
+            }
         }
     }
-
+}
+int validEmp_user(int id, char matricula[8]){
+    for(int i = 0; i < totalEmprestimos; i++){
+        if(emprestimos[i].id == id && strcmp(emprestimos[i].matricula_usuario, matricula) == 0){
+            return 1;
+        }
+    }
+    return 0;
 }
 
-void regisEmp(int matricula_aluno, char codigo[8]){
+void regisEmp(char matricula_aluno[8], char codigo[8]){
 
 }
 
@@ -54,9 +64,9 @@ void regDev(){ // função pra registrar devoluções
 
         mostrarCursor();
         printf("Qual a matricula do usuario que voce deseja registrar a devolucao? Digite 0 pra voltar: ");
-        scanf("%d", &matricula_aluno);
+        scanf("%s", matricula_aluno);
 
-        if(matricula_aluno == '0'){
+        if(matricula_aluno == "0"){
             return;
         }
         else{
@@ -69,9 +79,12 @@ void regDev(){ // função pra registrar devoluções
                     printf("O usario não possui emprestimos ativos. Escolha outro");
                     continue;
                 }
-                printf("O usuario possui %d emprestimos ativos, quais desses voce quer tirar? ");
+                printf("O usuario possui %d emprestimos ativos, quais desses voce quer registrar devolucao (Escreva o id de emprestimo)? ", usuarios[posicao_usuario].qtd_emprestimos_ativos);
                 listEmp_user(matricula_aluno);
                 scanf("%d", &remover);
+                if(validEmp_user(remover, matricula_aluno) == 1){
+                    return;
+                }
                 if(remover < qtd_emprestimo && remover > qtd_emprestimo){ 
                     printf("O emprestimo selecionado não existe!");
                 }
@@ -98,7 +111,7 @@ void addEmp(){ // função pra adicionar emprestimos
         {
         printf("Qual a matricula do usuario? Digite 0 para voltar: ");
         scanf("%f", matricula_aluno);
-        if (matricula_aluno == '0'){
+        if (matricula_aluno == "0"){
             return;
         }
         else{
