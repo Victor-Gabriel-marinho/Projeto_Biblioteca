@@ -373,8 +373,8 @@ void EditarLivro()
     printf("Digite o código do livro que deseja editar: ");
     scanf("%s", codigo);
 
-    BuscarLivroPorCodigo(&livroEncontrado, codigo);
-    if (BuscarLivroPorCodigo(&livroEncontrado, codigo) == 0)
+    busca_livroCodigo(&livroEncontrado, codigo);
+    if (busca_livroCodigo(&livroEncontrado, codigo) == 0)
     {
         printf("Erro ao buscar livro.\n");
         system("pause");
