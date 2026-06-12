@@ -6,12 +6,22 @@
 #include <time.h>
 #include "../include/algoritmos.h"
 #include "../include/interface.h"
+#include "../include/Users.h"
+#include "../include/persistencia.h"
+#include "../include/emprestimos.h"
 
 int validacao_codigo(char codigo[8])
 { // função pra checar se o codigo enviado é válido, retorna 0 (false, não é valido) ou retorna 1(true, é valido)
 }
-int validacao_matricula(int matricula_aluno)
+int validacao_matricula(char matricula_aluno[8], int *posicao)
 { // função pra checar se a matricula enviada é válida, retorna 0 (false, não é valido) ou retorna 1(true, é valido)
+    for(int i = 0; i < totalUsuarios; i++){
+    if (strcmp(matricula_aluno, usuarios[i].matricula) == 0){
+        *posicao = i;
+        return 1;
+    }
+    return 0;
+}
 }
 int validacao_quantidade(int qtd_disponivel)
 { // função pra     checar se tem quantidade disponivel para emprestmo, retorna 0 (false, não tem) ou retorna 1(true, tem)
@@ -21,7 +31,14 @@ int validacao_usuario(int qtd_usuario)
 }
 
 
-void listEmp_user(int matricula){
+void listEmp_user(char matricula[8]){
+    for(int i = 0; i < totalEmprestimos; i++){
+        if(strcmp(emprestimos[i].matricula_usuario, matricula) == 0){
+            printf("Emprestimos de %s: \n", emprestimos[i].matricula_usuario);
+            if(emprestimos[i].devolvido ==0){
+            printf("ID: %d\nData do emprestimo: %s\nData prevista de devolucao: %s\n", emprestimos[i].id, emprestimos[i].data_retirada, emprestimos[i].data_prevista);}
+        }
+    }
 
 }
 
@@ -30,24 +47,25 @@ void regisEmp(int matricula_aluno, char codigo[8]){
 }
 
 void regDev(){ // função pra registrar devoluções 
+    int posicao_usuario;
     int qtd_emprestimo;
-    int matricula_aluno;
+    char matricula_aluno[8];
     while(1){ // loop central da função 
 
         mostrarCursor();
         printf("Qual a matricula do usuario que voce deseja registrar a devolucao? Digite 0 pra voltar: ");
         scanf("%d", &matricula_aluno);
 
-        if(matricula_aluno == 0){
+        if(matricula_aluno == '0'){
             return;
         }
         else{
-            if(validacao_matricula(matricula_aluno) == 0){
+            if(validacao_matricula(matricula_aluno, &posicao_usuario) == 0){
                 printf("Matricula invalida! Digite uma matricula valida.");
             }
             else{
                 int remover;
-                if(qtd_emprestimo == 0){
+                if(usuarios[posicao_usuario].qtd_emprestimos_ativos == 0){
                     printf("O usario não possui emprestimos ativos. Escolha outro");
                     continue;
                 }
@@ -70,20 +88,21 @@ void listEmp_atraso(){ // função pra listar emprestimos em atraso
 
 void addEmp(){ // função pra adicionar emprestimos
 
-    int matricula_aluno; // variavel local da matricula do aluno na execucao atual
+    char matricula_aluno[8]; // variavel local da matricula do aluno na execucao atual
     char codigo[8];      // variavel local de codigo do livro
     int qtd_disponivel;
     int qtd_usuario;
+    int posicao;
 
         while (1)
         {
         printf("Qual a matricula do usuario? Digite 0 para voltar: ");
-        scanf("%d", &matricula_aluno);
-        if (matricula_aluno == 0){
+        scanf("%f", matricula_aluno);
+        if (matricula_aluno == '0'){
             return;
         }
         else{
-            if (validacao_matricula(matricula_aluno) == 0)
+            if (validacao_matricula(matricula_aluno, &posicao) == 0)
             { // Válida se a matricula escrita é valida por meio da função, se for valida ele só continua, se for invalida ele diz que é invalida e volta pro começo do while principal.
                 printf("Matricula invalida! Digite uma matricula valida. \n");
             

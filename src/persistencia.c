@@ -47,3 +47,48 @@ void SalvarUsuarios (Usuario *usuarios, int totalusu) {
     fclose(arq);
     return;
 }
+
+Emprestimo *CarregarEmprestimos (int *total) {
+    Emprestimo temp;
+    int cont = 0;
+    Emprestimo *lista = NULL;
+
+    FILE *arquivo = fopen("data\\emprestimos.dat", "rb");
+
+    if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo");
+        system("pause");
+        *total = 0;
+        return NULL;
+    }
+
+    while (fread(&temp, sizeof(Usuario), 1,arquivo) == 1) {
+        Emprestimo *novo1 = realloc(lista, (cont+1) * sizeof(Emprestimo));
+        if (novo1 == NULL) {
+            printf("Erro na alocação de memória\n");
+            break;
+        }
+        lista = novo1;
+        lista[cont] = temp;
+        cont++;
+    }    
+    fclose(arquivo);
+    *total = cont;
+    return lista;
+}
+
+void SalvarEmprestimos (Emprestimo *emprestimos, int totalemp) { 
+    FILE *arquivo = fopen("data\\usuarios.dat", "wb");
+
+    if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo\n");
+        free(emprestimos);
+        system("pause");
+        return;
+    }
+
+    fwrite(emprestimos,sizeof(Emprestimo), totalemp, arquivo);
+
+    fclose(arquivo);
+    return;
+}

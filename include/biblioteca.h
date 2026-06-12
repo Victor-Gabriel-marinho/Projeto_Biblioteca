@@ -40,7 +40,7 @@ typedef struct
 typedef struct
 {
     int id;
-    int matricula_usuario;
+    char matricula_usuario[8];
     char data_retirada[11];
     char data_prevista[11];
     char data_devolucao[11];
