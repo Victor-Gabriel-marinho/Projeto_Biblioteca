@@ -12,7 +12,6 @@ extern int totalLivros;
 void AddLivros();
 void EditLivros();
 void ListLivros();
-void BuscarCodigoDoLivro();
 void RemoverLivro();
-void BuscarNomeDoLivro();
+void BuscarLivro();
 void Livros();
