@@ -140,7 +140,12 @@ void RemoverUsuario()
     scanf("%s", mat);
 
     encontrado = BuscarUsuarioPorMat(&usuarioEncontrado, mat);
-    if (encontrado == 1)  return;
+    if (encontrado == 0) {
+        
+        printf("Erro ao buscar usuario.\n");
+        system("pause");
+        return;
+    }
 
 
     printf("\nUsuário encontrado:\n");
@@ -212,8 +217,10 @@ void BuscarUsuarios()
             nome[strcspn(nome, "\n")] = '\0';
 
             result = BuscarUsuarioPorNome(&usuarioEncontrado, nome);
-            if (result == 1)
+            if (result == 0)
             {
+                printf("Erro ao buscar usuario.\n");
+                system("Pause");
                 return;
             }
 
@@ -241,8 +248,10 @@ void BuscarUsuarios()
             matricula[strcspn(matricula, "\n")] = '\0';
 
             result = BuscarUsuarioPorMat(&usuarioEncontrado, matricula);
-            if (result == 1)
+            if (result == 0)
             {
+                printf("Erro ao buscar usuario.\n");
+                system("pause");
                 return;
             }
 
@@ -278,8 +287,10 @@ void EditarUsuario()
     scanf("%s", mat);
 
     BuscarUsuarioPorMat(&usuarioEncontrado, mat);
-    if (usuarioEncontrado.matricula == NULL)
+    if (BuscarUsuarioPorMat(&usuarioEncontrado, mat) == 0)
     {
+        printf("Erro ao buscar usuario.\n");
+        system("pause");
         return;
     }
 

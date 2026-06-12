@@ -13,6 +13,6 @@ void AddLivros();
 void EditLivros();
 void ListLivros();
 void BuscarCodigoDoLivro();
-void RemoveLivros();
-void BuscarPorNomeDoLivro();
+void RemoverLivro();
+void BuscarNomeDoLivro();
 void Livros();

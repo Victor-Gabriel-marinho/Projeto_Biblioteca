@@ -44,6 +44,18 @@ void AddLivros()
         }
     } while (strlen(novoLivro.autor) == 0 || strcmp(novoLivro.autor, " ") == 0);
 
+ do
+    {
+        printf("Digite o gênero do livro: ");
+        fgets(novoLivro.genero, MAX_STRING, stdin);
+        novoLivro.genero[strcspn(novoLivro.genero, "\n")] = '\0';
+        
+        if (strlen(novoLivro.genero) == 0)
+        {
+            printf("Gênero inválido! Tente novamente.\n");
+        }
+    } while (strlen(novoLivro.genero) == 0 || strcmp(novoLivro.genero, " ") == 0);
+
     {
         int ano = 0;
         int ano_valido = 0;
@@ -63,19 +75,7 @@ void AddLivros()
         } while (!ano_valido && getchar() != '\n');
     }
 
-    do
-    {
-        printf("Digite o gênero do livro: ");
-        fgets(novoLivro.genero, MAX_STRING, stdin);
-        novoLivro.genero[strcspn(novoLivro.genero, "\n")] = '\0';
-        
-        if (strlen(novoLivro.genero) == 0)
-        {
-            printf("Gênero inválido! Tente novamente.\n");
-        }
-    } while (strlen(novoLivro.genero) == 0 || strcmp(novoLivro.genero, " ") == 0);
-
-    
+    {   
         int qtd_total = 0;
         int qtd_valida = 0;
 
@@ -90,9 +90,10 @@ void AddLivros()
             else
             {
                 qtd_valida = 1;
+                novoLivro.qtd_disponivel = novoLivro.qtd_total;
             }
         } while (!qtd_valida);
-   
+    }
 
     while (1)
     {
@@ -146,13 +147,7 @@ void listLivros()
             colunas = 1;
 
         // Cabeçalho
-            printf("%-50s", "========================");
-        printf("\n");
-
-         printf("%-40s", "         LIVRO"); 
-         printf("\n");
-
-            printf("%-50s", "========================");
+            printf("=== Livro %d ===\t\t", i + 1);
         printf("\n");
 
         // Código
@@ -187,93 +182,100 @@ void listLivros()
     system("pause");
 }
 
-// void RemoverUsuario()
-// {
-//     char mat[8];
-//     char tecla;
-//     int encontrado = 0;
-//     Usuario usuarioEncontrado;
-//     Usuario temp;
-//     mostrarCursor();
+ void RemoverLivro()
+{
+    char cod[8];
+    char tecla;
+    int encontrado = 0;
+    int pos = -1;
+    Livro livroEncontrado;
 
-//     printf("=== REMOVER USUÁRIO ===\n\n");
+    mostrarCursor();
 
-//     printf("Digite a matrícula do usuário que deseja remover: ");
-//     scanf("%s", mat);
+    printf("=== REMOVER LIVRO ===\n\n");
 
-//     FILE *a = fopen("data\\usuarios.dat", "rb");
-//     if (a == NULL)
-//     {
-//         printf("Erro ao abrir o arquivo.\n");
-//         return;
-//     }
+    printf("Digite o código do livro que deseja remover: ");
+    scanf("%7s", cod);
 
-//     while (fread(&usuarioEncontrado, sizeof(Usuario), 1, a) == 1)
-//     {
-//         if (strcmp(usuarioEncontrado.matricula, mat) == 0)
-//         {
-//             encontrado = 1;
-//             break;
-//         }
-//     }
-//     fclose(a);
+    encontrado = busca_livroCodigo(&livroEncontrado, cod);
 
-//     if (encontrado != 1)
-//     {
-//         printf("Usuário com matrícula '%s' não encontrado.\n", mat);
-//         _getch();
-//         return;
-//     }
+    if (encontrado == 0)
+    {
+        printf("\nLivro com o código %s não encontrado!\n", cod);
+        _getch();
+        return;
+    }
 
-//     printf("\nUsuário encontrado:\n");
-//     printf("Matrícula: %s\n", usuarioEncontrado.matricula);
-//     printf("Nome: %s\n", usuarioEncontrado.nome);
+    printf("\nLivro encontrado:\n");
+    printf("Código: %s\n", livroEncontrado.codigo);
+    printf("Título: %s\n", livroEncontrado.titulo);
 
-//     printf("\nEsse é o usuário que você quer excluir?\n");
-//     printf(" Enter     - Sim\n");
-//     printf(" Backspace - Não\n");
+    printf("\nEsse é o livro que você quer excluir?\n");
+    printf("Enter     - Sim\n");
+    printf("Backspace - Não\n");
 
-//     tecla = _getch();
-//     if (tecla == 8)
-//     {
+    tecla = _getch();
 
-//         system("cls");
-//         return;
-//     }
-//     else if (tecla != 13)
-//     {
-//         return;
-//     }
+    if (tecla == 8) // Backspace
+    {
+        system("cls");
+        return;
+    }
 
-//     FILE *original = fopen("data\\usuarios.dat", "rb");
-//     FILE *temporario = fopen("data\\usuarios_temp.dat", "wb");
+    if (tecla != 13) // Enter
+    {
+        return;
+    }
 
-//     if (original == NULL || temporario == NULL)
-//     {
-//         printf("Erro ao abrir arquivos para remoção.\n");
-//         return;
-//     }
+    /* Procura a posição do livro no vetor */
+    for (int i = 0; i < totalLivros; i++)
+    {
+        if (strcmp(livros[i].codigo, cod) == 0)
+        {
+            pos = i;
+            break;
+        }
+    }
 
-//     while (fread(&temp, sizeof(Usuario), 1, original))
-//     {
-//         // Copia todos EXCETO o que tem a matrícula informada
-//         if (strcmp(temp.matricula, mat) != 0)
-//         {
-//             fwrite(&temp, sizeof(Usuario), 1, temporario);
-//         }
-//     }
+    if (pos == -1)
+    {
+        printf("\nErro ao localizar o livro no vetor!\n");
+        _getch();
+        return;
+    }
 
-//     fclose(original);
-//     fclose(temporario);
+    /* Desloca os elementos uma posição para a esquerda */
+    for (int i = pos; i < totalLivros - 1; i++)
+    {
+        livros[i] = livros[i + 1];
+    }
 
-//     // Substitui o original pelo temporário
-//     remove("data\\usuarios.dat");
-//     rename("data\\usuarios_temp.dat", "data\\usuarios.dat");
+    totalLivros--;
 
-//     printf("\nUsuário removido com sucesso!\n");
-//     _getch();
-//     system("cls");
-// }
+    /* Redimensiona o vetor */
+    if (totalLivros > 0)
+    {
+        Livro *temp = realloc(livros, totalLivros * sizeof(Livro));
+
+        if (temp != NULL)
+        {
+            livros = temp;
+        }
+    }
+    else
+    {
+        free(livros);
+        livros = NULL;
+    }
+
+    SalvarLivros(livros, totalLivros);
+
+    printf("\nLivro removido com sucesso!\n");
+
+    _getch();
+    system("cls");
+}
+
 
 // void BuscarPorNome(char nome[100])
 // {
@@ -521,13 +523,13 @@ void Livros()
         }
         else if (posicaoAtual == 2)
         {
-            // Função de buscar usuarios por nome ou matricula
+            // Função de buscar livros por código
             
         }
         else if (posicaoAtual == 3)
         {
             // Função de remover usuario através da matrícula
-            
+            RemoverLivro();
         }
         else if (posicaoAtual == 4)
         {
