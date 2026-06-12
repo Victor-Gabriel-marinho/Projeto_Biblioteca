@@ -10,8 +10,8 @@ void gerarID(char *buffer);
 
 /*criando uma void pra fazer as buscas dos livros
 ultilizando a busca binaria, sendo um metodo mais pratico*/
-int busca_livro(char codigo[8]);
-
+int busca_livroCodigo(Livro *livroEncontrado, char codigo[8]);
+int BuscarLivroPorTitulo(Livro *livroEncontrado, char titulo[MAX_STRING]);
 // Funções de busca de usuários
 int BuscarUsuarioPorNome(Usuario *usuarioEncontrado,char nome[8]);
 int BuscarUsuarioPorMat(Usuario *usuarioEncontrado,char matricula[8]);

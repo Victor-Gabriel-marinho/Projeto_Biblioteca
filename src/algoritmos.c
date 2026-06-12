@@ -42,12 +42,37 @@ int busca_livroCodigo(Livro *livroEncontrado, char codigo[8])
     }
 }
 
+int BuscarLivroPorTitulo(Livro *livroEncontrado, char titulo[MAX_STRING])
+{
+
+    for (int i = 0; titulo[i] != '\0'; i++)
+    {
+        titulo[i] = tolower(titulo[i]);
+    }
+    for (int i = 0; i < totalLivros; i++)
+    {
+        for (int i = 0; livros->titulo[i] != '\0'; i++)
+        {
+            livros->titulo[i] = tolower(livros->titulo[i]);
+        }
+        if (strcmp(titulo, livros[i].titulo) == 0)
+        {
+            *livroEncontrado = livros[i];
+            return 1;
+        }
+    }
+
+        system("pause");
+        return 0;
+    
+}
+
 
 // Busca um usuário pelo nome e copia os dados para usuarioEncontrado.
 // Se o nome não for encontrado, exibe mensagem de erro.
 int BuscarUsuarioPorNome(Usuario *usuarioEncontrado, char nome[8])
 {
-    int encontrado = 0;
+
     for (int i = 0; nome[i] != '\0'; i++)
     {
         nome[i] = tolower(nome[i]);
@@ -61,38 +86,32 @@ int BuscarUsuarioPorNome(Usuario *usuarioEncontrado, char nome[8])
         if (strcmp(nome, usuarios[i].nome) == 0)
         {
             *usuarioEncontrado = usuarios[i];
-            encontrado = 1;
-            break;
-            return 0;
+            return 1;
         }
     }
-    if (encontrado != 1)
-    {
-        printf("O usuário %s não foi encontrado\n", nome);
+
         system("pause");
-        return 1;
-    }
+        return 0;
+    
 }
 
 // Busca um usuário pela matrícula e copia os dados para usuarioEncontrado.
 // Se a matrícula não for encontrada, exibe mensagem de erro.
 int BuscarUsuarioPorMat(Usuario *usuarioEncontrado, char matricula[8])
 {
-    int encontrado = 0;
+
     for (int i = 0; i < totalUsuarios; i++)
     {
         if (strcmp(matricula, usuarios[i].matricula) == 0)
         {
             *usuarioEncontrado = usuarios[i];
-            encontrado = 1;
+
             system("pause");
             return 1;
         }
     }
-    if (encontrado != 1)
-    {
+
         return 0;
-    }
 }
 
 static void merge_livros(Livro *vet, Livro *tmp, int esq, int meio, int dir)
@@ -220,3 +239,4 @@ void merge_sort_emprestimos_data(Emprestimo *vet, int n)
     // Ordena os empréstimos por data de retirada
     merge_sort_emp_rec(vet, tmp, 0, n - 1);
 }
+
