@@ -276,113 +276,87 @@ void listLivros()
     system("cls");
 }
 
+void BuscarLivro()
+{
+    char opcoes[3][30] = {"Buscar por nome", "Buscar por código", "Voltar"};
 
-// void BuscarPorNome(char nome[100])
-// {
-//     FILE *f = fopen("data\\usuarios.dat", "rb");
-//     if (f == NULL)
-//     {
-//         printf("Erro ao abrir o arquivo\n");
-//         _getch();
-//         return;
-//     }
+    while (1)
+    {
+        int posicaoAtual = criarMenu("TELA DE BUSCA", opcoes, 3);
 
-//     Usuario u;
-//     int encontrado = 0;
-//     while (fread(&u, sizeof(Usuario), 1, f) == 1)
-//     {
-//         if (strcmp(nome, u.nome) == 0)
-//         {
-//             printf("=== Usuário ===\n");
-//             printf("Matrícula : %s\n", u.matricula);
-//             printf("Nome      : %s\n", u.nome);
-//             printf("Curso     : %s\n", u.curso);
-//             printf("Empréstimos ativos: %d\n\n", u.qtd_emprestimos_ativos);
-//             encontrado = 1;
-//             printf("Digite qualquer tecla para voltar\n");
-//             _getch();
-//             break;
-//         }
-//     }
-//     fclose(f);
-//     if (encontrado != 1)
-//     {
-//         printf("O usuário %s não foi encontrado\n", nome);
-//         _getch();
-//     }
-// }
+        // Busca por nome
+        if (posicaoAtual == 0)
+        {
+            mostrarCursor();
+            char titulo[MAX_STRING];
+            int result;
+            Livro livroEncontrado;
 
-// void BuscaPorMat(char matricula[7])
-// {
-//     FILE *f = fopen("data\\usuarios.dat", "rb");
-//     if (f == NULL)
-//     {
-//         printf("Erro ao abrir o arquivo\n");
-//         _getch();
-//         return;
-//     }
+            printf("Digite o título do livro: ");
+            fgets(titulo, MAX_STRING, stdin);
+            titulo[strcspn(titulo, "\n")] = '\0';
 
-//     Usuario u;
-//     int encontrado = 0;
-//     while (fread(&u, sizeof(Usuario), 1, f) == 1)
-//     {
-//         if (strcmp(matricula, u.matricula) == 0)
-//         {
-//             printf("=== Usuário ===\n");
-//             printf("Matrícula : %s\n", u.matricula);
-//             printf("Nome      : %s\n", u.nome);
-//             printf("Curso     : %s\n", u.curso);
-//             printf("Empréstimos ativos: %d\n\n", u.qtd_emprestimos_ativos);
-//             encontrado = 1;
-//             printf("Digite qualquer tecla para voltar\n");
-//             _getch();
-//             break;
-//         }
-//     }
-//     fclose(f);
-//     if (encontrado != 1)
-//     {
-//         printf("O usuário com a matrícula %s não foi encontrado\n", matricula);
-//         _getch();
-//     }
-// }
+            result = BuscarLivroPorTitulo(&livroEncontrado, titulo);
+          if (result == 0)
+        {
+            printf("Livro não encontrado!\n");
+            _getch();
+            continue;
+           }
 
-// void BuscarUsuarios()
-// {
-//     char opcoes[3][30] = {"Buscar por nome", "Buscar por matricula", "Voltar"};
+            printf("=== Livro ===\n");
+            printf("Código : %s\n", livroEncontrado.codigo);
+            printf("Título : %s\n", livroEncontrado.titulo);
+            printf("Autor  : %s\n", livroEncontrado.autor);
+            printf("Gênero : %s\n", livroEncontrado.genero);
+            printf("Ano    : %d\n", livroEncontrado.ano);
+         printf("Disponível: %d\n", livroEncontrado.qtd_disponivel);
+         printf("Acervo total: %d\n", livroEncontrado.qtd_total);
+        
 
-//     while (1)
-//     {
-//         int posicaoAtual = criarMenu("TELA DE BUSCA", opcoes, 3);
+            printf("Digite qualquer tecla para voltar\n");
+            _getch();
+        }
 
-//         // Busca por nome
-//         if (posicaoAtual == 0)
-//         {
-//             mostrarCursor();
-//             char nome[100];
-//             printf("Digite o nome do usuário: ");
-//             fgets(nome, 100, stdin);
-//             nome[strcspn(nome, "\n")] = '\0';
-//             BuscarPorNome(nome);
-//         }
-//         else if (posicaoAtual == 1)
-//         {
-//             // Busca por matricula
-//             mostrarCursor();
-//             char matricula[100];
-//             printf("Digite o nome do usuário: ");
-//             fgets(matricula, 100, stdin);
-//             matricula[strcspn(matricula, "\n")] = '\0';
-//             BuscaPorMat(matricula);
-//         }
-//         else if (posicaoAtual == 2)
-//         {
-//             system("cls");
-//             break;
-//         }
-//     }
-// }
+        // Busca por código
+        else if (posicaoAtual == 1)
+        {
+            mostrarCursor();
 
+            Livro livroEncontrado;
+            char codigo[8];
+            int result = 0;
+
+            printf("Digite o código do livro: ");
+            fgets(codigo, 8, stdin);
+            codigo[strcspn(codigo, "\n")] = '\0';
+
+            result = busca_livroCodigo(&livroEncontrado, codigo);
+           if (result == 0)
+           {
+            printf("Livro não encontrado!\n");
+            _getch();
+            continue;
+        }
+
+            printf("=== Livro ===\n");
+            printf("Código : %s\n", livroEncontrado.codigo);
+            printf("Título : %s\n", livroEncontrado.titulo);
+            printf("Autor  : %s\n", livroEncontrado.autor);
+            printf("Gênero : %s\n", livroEncontrado.genero);
+            printf("Ano    : %d\n", livroEncontrado.ano);
+            printf("Disponível: %d\n", livroEncontrado.qtd_disponivel);
+            printf("Acervo total: %d\n", livroEncontrado.qtd_total);
+            printf("Digite qualquer tecla para voltar\n");
+            _getch();
+        }
+        else if (posicaoAtual == 2)
+        {
+            system("cls");
+            break;
+        }
+    }
+}
 // void EditarUsuario()
 // {
 //     char mat[8];
@@ -524,7 +498,7 @@ void Livros()
         else if (posicaoAtual == 2)
         {
             // Função de buscar livros por código
-            
+            BuscarLivro();
         }
         else if (posicaoAtual == 3)
         {
