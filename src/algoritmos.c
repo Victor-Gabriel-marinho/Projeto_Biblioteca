@@ -109,6 +109,33 @@ int BuscarUsuarioPorMat(Usuario *usuarioEncontrado, char matricula[8])
 
         return 0;
 }
+int PegarIndiceUsuario(char matricula[8])
+{
+
+    for (int i = 0; i < totalUsuarios; i++)
+    {
+        if (strcmp(matricula, usuarios[i].matricula) == 0)
+        {
+            return i;
+        }
+    }
+
+        return 0;
+}
+
+int PegarIndiceLivro(char codigo[8])
+{
+
+    for (int i = 0; i < totalLivros; i++)
+    {
+        if (strcmp(codigo, livros[i].codigo) == 0)
+        {
+            return i;
+        }
+    }
+
+        return 0;
+}
 
 static void merge_livros(Livro *vet, Livro *tmp, int esq, int meio, int dir)
 {

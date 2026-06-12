@@ -64,10 +64,15 @@ Emprestimo *CarregarEmprestimos (int *total) {
 
     while (fread(&temp, sizeof(Usuario), 1,arquivo) == 1) {
         Emprestimo *novo1 = realloc(lista, (cont+1) * sizeof(Emprestimo));
+
         if (novo1 == NULL) {
             printf("Erro na alocação de memória\n");
             break;
         }
+        
+        printf("%d", cont);
+        system("pause");
+
         lista = novo1;
         lista[cont] = temp;
         cont++;
@@ -77,8 +82,9 @@ Emprestimo *CarregarEmprestimos (int *total) {
     return lista;
 }
 
+
 void SalvarEmprestimos (Emprestimo *emprestimos, int totalemp) { 
-    FILE *arquivo = fopen("data\\usuarios.dat", "wb");
+    FILE *arquivo = fopen("data\\emprestimos.dat", "wb");
 
     if (arquivo == NULL) {
         printf("Erro ao abrir o arquivo\n");
