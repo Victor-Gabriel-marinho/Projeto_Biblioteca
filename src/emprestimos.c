@@ -13,22 +13,21 @@
 #include "../include/livros.h"
 
 
-void listEmp_user(char matricula[8]) // Listar o emprestimos de um usuario 
+void listEmp_user(char matricula[8], Usuario *pessoa) // Listar o emprestimos de um usuario 
 {
     int c = 1;
     char today[11];
-    Usuario *pessoa;
     BuscarUsuarioPorMat(pessoa, matricula); // Pegar o nome do usuario pela matricula
+    printf("Emprestimos de %s: \n", pessoa->nome); 
     for (int i = 0; i < totalEmprestimos; i++)  // Percorre o vetor de emprestimos que sempre tem tamanho de totalEmprestimos
     {
         if (emprestimos[i].devolvido == 0 && strcmp(emprestimos[i].matricula_usuario, matricula) == 0) // Checa se a matricula registrada no emprestimo é a mesma que a matricula do aluno. Alem disso, checa se devolvido é igual a 0 para o emprestimo ainda estar aberto.
-        {
-            printf("Emprestimos de %s: \n", pessoa->nome); 
+        { 
             if (emprestimos[i].devolvido == 0)
             {
                 printf("%d: \nID: %d\nData do emprestimo: %s\nData prevista de devolucao: %s\n", c, emprestimos[i].id, emprestimos[i].data_retirada, emprestimos[i].data_prevista);
                 pegar_data_hoje(today); // pega a data de hoje para avisar caso esteja atrasado
-                if(comp_data(emprestimos[i].data_prevista, today) == 1){
+                if(comp_data(emprestimos[i].data_prevista, today) == -1){
                     printf("O emprestimo está atrasado!");
                 }
                 c++;
@@ -137,7 +136,7 @@ void regDev()
                     continue;
                 }
                 printf("O usuario possui %d emprestimos ativos, quais desses voce quer registrar devolucao (Escreva o id de emprestimo)? \n", pessoa.qtd_emprestimos_ativos);
-                listEmp_user(matricula_aluno);
+                listEmp_user(matricula_aluno, &pessoa);
                 scanf("%d", &remover);
 
                 if (validEmp_user(remover-1, matricula_aluno, &posicao_emprestimo) == 1) // o valid emp user serve para pegar a posicao do emprestimo selecionado pelo usuario
@@ -178,7 +177,7 @@ void listEmp_atraso()
     printf("EMPRESTIMOS ATRASADOS: \n");
     for(int i = 0; i < totalEmprestimos; i++){
         if(emprestimos[i].devolvido== 0 && comp_data(emprestimos[i].data_prevista, today) == -1){ // percore o vetor emprestimos e caso o livro nao foi entregue (devolvido == 0) e a função comparacao de datas, considerando a data prevista de entrega e o dia de hoje retorne -1 (isso é, a data de hoje for maior que a data prevista de entrega)
-            printf("ID: %d\n Matricula:%7s\n Codigo do livro: %7s\nData de Retirada: %11s\n Data prevista: %11s\n", emprestimos[i].id, emprestimos[i].codigo_livro, emprestimos[i].data_retirada, emprestimos[i].data_prevista);
+            printf("ID: %d\n Matricula:%7s\n Codigo do livro: %7s\nData de Retirada: %11s\n Data prevista: %11s\n", emprestimos[i].id,emprestimos[i].matricula_usuario, emprestimos[i].codigo_livro, emprestimos[i].data_retirada, emprestimos[i].data_prevista);
         }
     }
     system("pause");
@@ -274,7 +273,7 @@ void emp()
         else if (posicaoAtual == 1)
         {
             // Função de listar emprestimos atrasados
-            listarEmp();
+            listEmp_atraso();
         }
         else if (posicaoAtual == 2)
         {
