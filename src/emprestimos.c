@@ -54,7 +54,7 @@ void listarEmp()
 
     for (int i = 0; i < totalEmprestimos; i++)
     {   
-        printf("ID - %d\n", emprestimos[i].id);
+        printf("ID - %d\n Matricula livro: %7s, Data de retirada: %10s, Data prevista: %10s\n", emprestimos[i].id, emprestimos[i].matricula_usuario, emprestimos[i].data_retirada, emprestimos[i].data_prevista);
     }
     system("Pause");
 }
@@ -83,7 +83,7 @@ void regisEmp(Usuario *pessoa, Livro *livro, char data[11])
     strcpy(novo.data_prevista, data_temp);
     strcpy(novo.data_devolucao, "ND"); // esses 5 strcpy sao preenchendo a struct do emprestimo novo com as informações enviadas pelo usuario.
     novo.devolvido = 0;
-    emprestimos[totalEmprestimos] = novo;
+    emprestimos[totalEmprestimos] = novo; // enviando a nova struct para a ultima posicao do vetor de emprestimos
     totalEmprestimos++;
 
     printf("%d",totalEmprestimos);
@@ -274,7 +274,7 @@ void emp()
         else if (posicaoAtual == 1)
         {
             // Função de listar emprestimos atrasados
-            listEmp_atraso();
+            listarEmp();
         }
         else if (posicaoAtual == 2)
         {

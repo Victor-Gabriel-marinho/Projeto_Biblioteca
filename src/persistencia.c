@@ -49,7 +49,7 @@ void SalvarUsuarios (Usuario *usuarios, int totalusu) {
 }
 
 Emprestimo *CarregarEmprestimos (int *total) {
-    Emprestimo temp;
+    Emprestimo temp = {0};
     int cont = 0;
     Emprestimo *lista = NULL;
 
@@ -67,11 +67,12 @@ Emprestimo *CarregarEmprestimos (int *total) {
 
         if (novo1 == NULL) {
             printf("Erro na alocação de memória\n");
-            break;
+            free(lista);
+            fclose(arquivo);
+            *total =0;
+            return NULL; 
         }
         
-        printf("%d", cont);
-        system("pause");
 
         lista = novo1;
         lista[cont] = temp;
