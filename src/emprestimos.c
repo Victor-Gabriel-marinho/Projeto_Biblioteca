@@ -12,42 +12,25 @@
 #include <ctype.h>
 #include "../include/livros.h"
 
-int comp_data(char data1[11], char data2[11])
-{
-    int d1, m1, a1;
-    int d2, m2, a2;
 
-    // extrai dia, mês e ano
-    sscanf(data1, "%d/%d/%d", &d1, &m1, &a1);
-    sscanf(data2, "%d/%d/%d", &d2, &m2, &a2);
-
-    // compara ano
-    if (a1 > a2) return 1;
-    if (a1 < a2) return -1;
-
-    // compara mês
-    if (m1 > m2) return 1;
-    if (m1 < m2) return -1;
-
-    // compara dia
-    if (d1 > d2) return 1;
-    if (d1 < d2) return -1;
-
-    return 0;
-}
-
-
-void listEmp_user(char matricula[8])
+void listEmp_user(char matricula[8]) // Listar o emprestimos de um usuario 
 {
     int c = 1;
-    for (int i = 0; i < totalEmprestimos; i++)
+    char today[11];
+    Usuario *pessoa;
+    BuscarUsuarioPorMat(pessoa, matricula); // Pegar o nome do usuario pela matricula
+    for (int i = 0; i < totalEmprestimos; i++)  // Percorre o vetor de emprestimos que sempre tem tamanho de totalEmprestimos
     {
-        if (strcmp(emprestimos[i].matricula_usuario, matricula) == 0)
+        if (emprestimos[i].devolvido == 0 && strcmp(emprestimos[i].matricula_usuario, matricula) == 0) // Checa se a matricula registrada no emprestimo é a mesma que a matricula do aluno. Alem disso, checa se devolvido é igual a 0 para o emprestimo ainda estar aberto.
         {
-            printf("Emprestimos de %s: \n", emprestimos[i].matricula_usuario);
+            printf("Emprestimos de %s: \n", pessoa->nome); 
             if (emprestimos[i].devolvido == 0)
             {
                 printf("%d: \nID: %d\nData do emprestimo: %s\nData prevista de devolucao: %s\n", c, emprestimos[i].id, emprestimos[i].data_retirada, emprestimos[i].data_prevista);
+                pegar_data_hoje(today); // pega a data de hoje para avisar caso esteja atrasado
+                if(comp_data(emprestimos[i].data_prevista, today) == 1){
+                    printf("O emprestimo está atrasado!");
+                }
                 c++;
             }
         }
@@ -57,126 +40,30 @@ int validEmp_user(int id, char matricula[8], int *posicao_emprestimo)
 {
     for (int i = 0; i < totalEmprestimos; i++)
     {
-        if (emprestimos[i].id == id && strcmp(emprestimos[i].matricula_usuario, matricula) == 0)
+        if (emprestimos[i].id == id && strcmp(emprestimos[i].matricula_usuario, matricula) == 0) 
         {
-            *posicao_emprestimo = i;
+            *posicao_emprestimo = i;    // aqui além de checar se determinado emprestimo é de determinado usuario pela matricula, tbm checa a posicao desse emprestimo no vetor emprestimos
             return 1;
         }
     }
     return 0;
-}
-void calcular_data(char data[11])
-{
-    int dia, mes, ano;
-
-    // pega os valores da string
-    sscanf(data, "%2d/%2d/%4d", &dia, &mes, &ano);
-
-    // adiciona 14 dias
-    dia += 14;
-
-    // ajusta meses
-    while (dia > 30)
-    {
-
-        dia -= 30;
-        mes++;
-
-        if (mes > 12)
-        {
-            mes = 1;
-            ano++;
-        }
-    }
-
-    // sobrescreve a string original
-    sprintf(data, "%02d/%02d/%04d", dia, mes, ano);
-}
-
-void ler_data(char data[])
-{
-
-    int dia, mes, ano;
-    int valida = 0;
-
-    while (valida == 0)
-    {
-
-        printf("Digite a data (dd/mm/aaaa): ");
-        scanf("%10s", data);
-
-        // verifica tamanho
-        if (strlen(data) != 10)
-        {
-            printf("Data invalida!\n");
-            continue;
-        }
-
-        // verifica barras
-        if (data[2] != '/' || data[5] != '/')
-        {
-            printf("Data invalida!\n");
-            continue;
-        }
-
-        // verifica numeros
-        int erro = 0;
-
-        for (int i = 0; i < 10; i++)
-        {
-
-            if (i == 2 || i == 5)
-                continue;
-
-            if (!isdigit(data[i]))
-            {
-                erro = 1;
-                break;
-            }
-        }
-
-        if (erro)
-        {
-            printf("Data invalida!\n\n");
-            continue;
-        }
-
-        // converte
-        sscanf(data, "%2d/%2d/%4d", &dia, &mes, &ano);
-
-        // verifica dia
-        if (dia < 1 || dia > 31)
-        {
-            printf("Dia invalido!\n\n");
-            continue;
-        }
-
-        // verifica mes
-        if (mes < 1 || mes > 12)
-        {
-            printf("Mes invalido!\n\n");
-            continue;
-        }
-
-        valida = 1;
-    }
 }
 
 void listarEmp()
 {
 
     for (int i = 0; i < totalEmprestimos; i++)
-    {
+    {   
         printf("ID - %d\n", emprestimos[i].id);
     }
     system("Pause");
 }
 
-void regisEmp(Usuario *pessoa, Livro *livro, char data[10])
+void regisEmp(Usuario *pessoa, Livro *livro, char data[11])
 {
     char data_temp[11];
-    Emprestimo novo;
-    Emprestimo *temp = realloc(emprestimos, (totalEmprestimos + 1) * sizeof(Emprestimo));
+    Emprestimo novo; // criacao da struct do novo emprestimo
+    Emprestimo *temp = realloc(emprestimos, (totalEmprestimos + 1) * sizeof(Emprestimo)); // realocação do vetor de emprestimos
     if (temp == NULL)
     {
         printf("Erro: falha ao alocar memória! Emprestimo não foi registrado.\n");
@@ -186,16 +73,15 @@ void regisEmp(Usuario *pessoa, Livro *livro, char data[10])
 
     emprestimos = temp;
 
-    strcpy(data_temp, data);
-    calcular_data(data_temp);
-    novo.id = totalEmprestimos;
+    strcpy(data_temp, data); // aqui copia a data enviada pelo usuario numa variavel auxilia
+    somar_14_dias(data_temp); // adiciona 14 dias na variavel auxiliar que contem a data enviada pelo usuario
+    novo.id = totalEmprestimos+1; // a logica dos IDs dos emprestimos é simples: o ID vai começar de 1 e vai se somando 1 a cada emprestimo, dessa forma, alem de evitar que o ID de um emprestimo se repita por outro pelos metodos de randomização, facilita a busca pelo ID
 
-    strcpy(novo.matricula_usuario, pessoa->matricula);
+    strcpy(novo.matricula_usuario, pessoa->matricula); 
     strcpy(novo.codigo_livro, livro->codigo);
     strcpy(novo.data_retirada, data);
     strcpy(novo.data_prevista, data_temp);
-    strcpy(novo.data_devolucao, "ND");
-
+    strcpy(novo.data_devolucao, "ND"); // esses 5 strcpy sao preenchendo a struct do emprestimo novo com as informações enviadas pelo usuario.
     novo.devolvido = 0;
     emprestimos[totalEmprestimos] = novo;
     totalEmprestimos++;
@@ -203,16 +89,16 @@ void regisEmp(Usuario *pessoa, Livro *livro, char data[10])
     printf("%d",totalEmprestimos);
     system("pause");
 
-    SalvarEmprestimos(emprestimos, totalEmprestimos);
+    SalvarEmprestimos(emprestimos, totalEmprestimos); // salvando os emprestimos
 
     int i = PegarIndiceUsuario(pessoa->matricula);
-    int j = PegarIndiceLivro(livro->codigo);
+    int j = PegarIndiceLivro(livro->codigo); 
 
     usuarios[i].qtd_emprestimos_ativos++;
-    livros[j].qtd_disponivel--;
+    livros[j].qtd_disponivel--; 
 
     SalvarUsuarios(usuarios, totalUsuarios);
-    SalvarLivros(livros, totalLivros);
+    SalvarLivros(livros, totalLivros); // Como um emprestimo altera nao so a quantidade de livro disponivel como tambem a quantidade de emprestims de um usuario, precisamos fazer essas alterações em usuarios e livros e depois salvar elas.
 }
 
 void regDev()
@@ -222,14 +108,14 @@ void regDev()
     int qtd_emprestimo;
     int posicao_emprestimo;
     char matricula_aluno[8];
+    char today[11];
+    pegar_data_hoje(today);
     Livro livro;
     while (1)
-    { // loop central da função
+    { 
 
-        mostrarCursor();
         printf("Qual a matricula do usuario que voce deseja registrar a devolucao? Digite 0 pra voltar: ");
-        scanf("%s", matricula_aluno);
-        printf("%d", BuscarUsuarioPorMat(&pessoa, matricula_aluno));
+        scanf("%7s", matricula_aluno);
         if (strcmp(matricula_aluno, "0") == 0)
         {
             return;
@@ -238,7 +124,8 @@ void regDev()
         {
             if (BuscarUsuarioPorMat(&pessoa, matricula_aluno) == 0)
             {
-                printf("Matricula invalida! Digite uma matricula valida.");
+                printf("Matricula invalida! Digite uma matricula valida.\n");
+                system("pause");
                 continue;
             }
             else
@@ -246,29 +133,37 @@ void regDev()
                 int remover;
                 if (pessoa.qtd_emprestimos_ativos == 0)
                 {
-                    printf("O usario não possui emprestimos ativos. Escolha outro");
+                    printf("O usario não possui emprestimos ativos. Escolha outro\n"); // todo esse começo é so validacao das condicoes para pegar um emprestimo, basicamente verificando se a matricula é valido, e caso seja, buscando o usuario pela matricula para checar se ele de fato tem algum emprestimo.
                     continue;
                 }
-                printf("O usuario possui %d emprestimos ativos, quais desses voce quer registrar devolucao (Escreva o id de emprestimo)? ", pessoa.qtd_emprestimos_ativos);
+                printf("O usuario possui %d emprestimos ativos, quais desses voce quer registrar devolucao (Escreva o id de emprestimo)? \n", pessoa.qtd_emprestimos_ativos);
                 listEmp_user(matricula_aluno);
                 scanf("%d", &remover);
 
-                if (validEmp_user(remover, matricula_aluno, &posicao_emprestimo) == 1)
+                if (validEmp_user(remover-1, matricula_aluno, &posicao_emprestimo) == 1) // o valid emp user serve para pegar a posicao do emprestimo selecionado pelo usuario
                 {
                     char codigo_temp[8];
-                    strcpy(codigo_temp, emprestimos[posicao_emprestimo].codigo_livro);
-                    busca_livroCodigo(&livro, codigo_temp);
-                    for (int i = posicao_emprestimo; i < totalEmprestimos - 1; i++)
-                    {
-                        emprestimos[i] = emprestimos[i + 1];
-                    }
-                    totalEmprestimos--;
+                    strcpy(codigo_temp, emprestimos[posicao_emprestimo].codigo_livro); // pegar o codigo do livro para acessar ele
+                    busca_livroCodigo(&livro, codigo_temp); 
+                    emprestimos[posicao_emprestimo].devolvido = 1;  
+                    strcpy(emprestimos[posicao_emprestimo].data_devolucao, today);
+                    int i = PegarIndiceUsuario(pessoa.matricula);
+                    int j = PegarIndiceLivro(livro.codigo);
+                    usuarios[i].qtd_emprestimos_ativos--;
+                    livros[j].qtd_disponivel++; // todas as linhas desde o ultimo comentario foram feitas para localizar o livro e o usuario para poder alterar a quantidade disponivel do livro e a quantidade de emprestimos ativos do usuarios.
+
+                    emprestimos[posicao_emprestimo].devolvido = 1;  
+                    strcpy(emprestimos[posicao_emprestimo].data_devolucao, today); // aqui é alterando a data de devolução para a data de hoje e trocando o status de devolvido para 1 (devolvido)
+                    
+                    SalvarUsuarios(usuarios, totalUsuarios);
+                    SalvarLivros(livros, totalLivros);
+                    SalvarEmprestimos(emprestimos, totalEmprestimos); // Salvando alterações dos vetores
                     printf("Devolucao registrada com sucesso!");
                     return;
                 }
                 if (validEmp_user(remover, matricula_aluno, &posicao_emprestimo) == 0)
                 {
-                    printf("O emprestimo selecionado não existe ou não pertence ao usuario selecionado!");
+                    printf("O emprestimo selecionado não existe ou não pertence ao usuario selecionado!"); // caso o usuario digite uma opção que nao condiz com um dos emprestimos mostrados
                     continue;
                 }
             }
@@ -279,34 +174,34 @@ void regDev()
 void listEmp_atraso()
 { // função pra listar emprestimos em atraso
     char today[11];
-    data_hoje(today);
+    pegar_data_hoje(today); // pega o dia de hoje
+    printf("EMPRESTIMOS ATRASADOS: \n");
     for(int i = 0; i < totalEmprestimos; i++){
-        printf("EMPRESTIMOS ATRASADOS: \n");
-        if(comp_data(emprestimos[i].data_prevista, today) == 1){
-            printf("ID: %d\n Matricula:%7s\n Codigo do livro: %7s\nData de Retirada: %10s\n Data prevista: %10s\n", emprestimos[i].id, emprestimos[i].codigo_livro, emprestimos[i].data_retirada, emprestimos[i].data_prevista);
+        if(emprestimos[i].devolvido== 0 && comp_data(emprestimos[i].data_prevista, today) == -1){ // percore o vetor emprestimos e caso o livro nao foi entregue (devolvido == 0) e a função comparacao de datas, considerando a data prevista de entrega e o dia de hoje retorne -1 (isso é, a data de hoje for maior que a data prevista de entrega)
+            printf("ID: %d\n Matricula:%7s\n Codigo do livro: %7s\nData de Retirada: %11s\n Data prevista: %11s\n", emprestimos[i].id, emprestimos[i].codigo_livro, emprestimos[i].data_retirada, emprestimos[i].data_prevista);
         }
     }
+    system("pause");
 }
 
 void addEmp()
 { // função pra adicionar emprestimos
     Usuario pessoa;
-    char matricula_aluno[8]; // variavel local da matricula do aluno na execucao atual
-    char codigo[8];          // variavel local de codigo do livro
+    char matricula_aluno[8]; 
+    char codigo[8];          
     int qtd_disponivel;
     int qtd_usuario;
     int posicao;
     char data_emp[11];
     Livro livro;
-
     while (1)
     {
         mostrarCursor();
-        printf("Qual a matricula do usuario? Digite 0 para voltar: ");
+        printf("Qual a matricula do usuario? Digite 0 para voltar: "); 
         scanf("%7s", matricula_aluno);
-        if (strcmp(matricula_aluno, "0") == 0)
+        if (strcmp(matricula_aluno, "0") == 0) 
         {
-            return;
+            return; 
         }
         if (BuscarUsuarioPorMat(&pessoa, matricula_aluno) == 0)
         { // Válida se a matricula escrita é valida por meio da função, se for valida ele só continua, se for invalida ele diz que é invalida e volta pro começo do while principal.
@@ -315,8 +210,7 @@ void addEmp()
         }
         else
         {
-            printf("%d", pessoa.qtd_emprestimos_ativos);
-            if (pessoa.qtd_emprestimos_ativos == 3)
+            if (pessoa.qtd_emprestimos_ativos == 3) // verificação se o usuario ja tem 3 emprestimos ativos
             {
                 printf("O usuário já possui 3 emprestimos ativos e não pode registrar um novo. \n");
                 system("pause");
@@ -350,7 +244,7 @@ void addEmp()
         else
         {
             ler_data(data_emp);
-            regisEmp(&pessoa, &livro, data_emp);
+            regisEmp(&pessoa, &livro, data_emp); // aqui so chama a funcao enviando as informações necessarias
 
             printf("Emprestimo registrado com sucesso!\n");
             system("pause");
@@ -360,7 +254,7 @@ void addEmp()
 }
 
 void emp()
-{
+{   
 
     char opcoes[3][30] = {"Registrar emprestimo", "Listar emprestimos em atraso", "Voltar"};
     char data[11];
@@ -374,12 +268,12 @@ void emp()
 
         if (posicaoAtual == 0)
         {
-            // Função de adicionar usuários
+            // Função de adicionar emprestimo
             addEmp();
         }
         else if (posicaoAtual == 1)
         {
-            // Função de buscar usuarios por nome ou matricula
+            // Função de listar emprestimos atrasados
             listEmp_atraso();
         }
         else if (posicaoAtual == 2)

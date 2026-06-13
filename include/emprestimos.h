@@ -9,6 +9,10 @@ void emp();
 void addEmp();
 void listEmp_atraso();
 void regDev();
+void listarEmp();
+void listEmp_user(char matricula[8]);
+int validEmp_user(int id, char matricula[8], int *posicao_emprestimo);
+void regisEmp(Usuario *pessoa, Livro *livro, char data[10]);
 
 
 

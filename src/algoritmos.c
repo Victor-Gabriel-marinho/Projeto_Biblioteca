@@ -7,6 +7,109 @@
 #include "../include/livros.h"
 #include <time.h>
 
+int comp_data(char data1[11], char data2[11]) // Funçao para comparar duas datas, retorna 1 para data1 > data2, -1 para data2 > data1 e 0 para data1 = data2.
+{
+    int d1, m1, a1;
+    int d2, m2, a2;
+
+    // extrai dia, mês e ano
+    sscanf(data1, "%d/%d/%d", &d1, &m1, &a1);
+    sscanf(data2, "%d/%d/%d", &d2, &m2, &a2);
+
+    // compara ano
+    if (a1 > a2) return 1;
+    if (a1 < a2) return -1;
+
+    // compara mês
+    if (m1 > m2) return 1;
+    if (m1 < m2) return -1;
+
+    // compara dia
+    if (d1 > d2) return 1;
+    if (d1 < d2) return -1;
+
+    return 0;
+}
+void pegar_data_hoje(char data[11])
+{
+    time_t t = time(NULL);
+    struct tm *hoje = localtime(&t);
+
+    sprintf(data, "%02d/%02d/%04d",
+            hoje->tm_mday,
+            hoje->tm_mon + 1,
+            hoje->tm_year + 1900);
+}
+
+void ler_data(char data[])
+{
+
+    int dia, mes, ano;
+    int valida = 0;
+
+    while (valida == 0)
+    {
+
+        printf("Digite a data (dd/mm/aaaa): ");
+        scanf("%10s", data);
+
+        // verifica tamanho
+        if (strlen(data) != 10)
+        {
+            printf("Data invalida!\n");
+            continue;
+        }
+
+        // verifica barras
+        if (data[2] != '/' || data[5] != '/')
+        {
+            printf("Data invalida!\n");
+            continue;
+        }
+
+        // verifica numeros
+        int erro = 0;
+
+        for (int i = 0; i < 10; i++)
+        {
+
+            if (i == 2 || i == 5)
+                continue;
+
+            if (!isdigit(data[i]))
+            {
+                erro = 1;
+                break;
+            }
+        }
+
+        if (erro)
+        {
+            printf("Data invalida!\n\n");
+            continue;
+        }
+
+        // converte
+        sscanf(data, "%2d/%2d/%4d", &dia, &mes, &ano);
+
+        // verifica dia
+        if (dia < 1 || dia > 31)
+        {
+            printf("Dia invalido!\n\n");
+            continue;
+        }
+
+        // verifica mes
+        if (mes < 1 || mes > 12)
+        {
+            printf("Mes invalido!\n\n");
+            continue;
+        }
+
+        valida = 1;
+    }
+}
+
 
 // Função para gerar matricula automaticamente
 void gerarID(char *buffer)
@@ -19,16 +122,33 @@ void gerarID(char *buffer)
 
     buffer[MAX_MAT + 1] = '\0';
 }
-void data_hoje(char data[11]) {
-    time_t agora = time(NULL);
-    struct tm *info = localtime(&agora);
+void somar_14_dias(char data[11])
+{
+    int dia, mes, ano;
 
-    sprintf(data, "%02d/%02d/%04d",
-            info->tm_mday,
-            info->tm_mon + 1,
-            info->tm_year + 1900);
+    // extrai dd/mm/aaaa
+    sscanf(data, "%2d/%2d/%4d", &dia, &mes, &ano);
+
+    // soma 14 dias
+    dia += 14;
+
+    // ajusta dias para meses de 30 dias
+    while (dia > 30)
+    {
+        dia -= 30;
+        mes++;
+    }
+
+    // ajusta meses para ano de 12 meses
+    while (mes > 12)
+    {
+        mes -= 12;
+        ano++;
+    }
+
+    // escreve de volta na string
+    sprintf(data, "%02d/%02d/%04d", dia, mes, ano);
 }
-
 /*busca binaria para encontrar o livro pelo codigo,
 retorna o indice do livro no vetor ou -1 se não encontrado*/
 

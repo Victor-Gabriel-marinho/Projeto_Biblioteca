@@ -9,6 +9,9 @@
 #include "../include/relatorios.h"
 #include "../include/livros.h"
 #include "../include/persistencia.h"
+#include "../include/emprestimos.h"
+
+
 
 Banco db;
 Usuario *usuarios = NULL;
