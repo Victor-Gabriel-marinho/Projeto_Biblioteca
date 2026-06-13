@@ -252,17 +252,41 @@ void addEmp()
     }
 }
 
+
+
+void pegar_user(){
+    Usuario pessoa;
+    char matricula[8];
+
+    while(1){
+        printf("Qual a matricula do usuario vc quer visualizar os emprestimos? Clique 0 para voltar: ");
+        scanf("%7s", matricula);
+        if(strcmp(matricula, "0") == 0){
+            return;
+        }
+        if(BuscarUsuarioPorMat(&pessoa, matricula) == 0){
+            printf("A matricula nao corresponde a nenhum usuario!");
+            continue;
+        }
+        break;
+    }
+    listEmp_user(matricula, &pessoa);
+    system("pause");
+
+}
+
+
 void emp()
 {   
 
-    char opcoes[3][30] = {"Registrar emprestimo", "Listar emprestimos em atraso", "Voltar"};
+    char opcoes[4][30] = {"Registrar emprestimo","Listar emprestimos de usuario", "Listar emprestimos em atraso", "Voltar"};
     char data[11];
     
     
     while (1)
     {
         // Função para criar interface
-        int posicaoAtual = criarMenu("TELA DE EMPRESTIMOS", opcoes, 3);
+        int posicaoAtual = criarMenu("TELA DE EMPRESTIMOS", opcoes, 4);
     
 
         if (posicaoAtual == 0)
@@ -273,9 +297,14 @@ void emp()
         else if (posicaoAtual == 1)
         {
             // Função de listar emprestimos atrasados
-            listEmp_atraso();
+            pegar_user();
         }
         else if (posicaoAtual == 2)
+        {
+            // Função de listar emprestimos atrasados
+            listEmp_atraso();
+        }
+        else if (posicaoAtual == 3)
         {
             system("cls");
             break;
