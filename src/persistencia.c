@@ -62,7 +62,7 @@ Emprestimo *CarregarEmprestimos (int *total) {
         return NULL;
     }
 
-    while (fread(&temp, sizeof(Usuario), 1,arquivo) == 1) {
+    while (fread(&temp, sizeof(Emprestimo), 1,arquivo) == 1) {
         Emprestimo *novo1 = realloc(lista, (cont+1) * sizeof(Emprestimo));
 
         if (novo1 == NULL) {
@@ -98,11 +98,6 @@ void SalvarEmprestimos (Emprestimo *emprestimos, int totalemp) {
     fclose(arquivo);
     return;
 }
-
-#include <stdio.h>
-#include <stdlib.h>
-#include "../include/persistencia.h"
-#include "../include/biblioteca.h"
 
 Livro *CarregarLivros (int *total) {
     Livro temp;
