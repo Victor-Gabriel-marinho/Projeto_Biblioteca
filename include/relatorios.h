@@ -8,6 +8,7 @@ void Relatorios();
 
 // Relatórios individuais
 void relatorioLivrosMaisEmprestados();
+static int diasAtraso(const char *previsto, const char *hoje);
 void relatorioEmprestimosAtraso();
 void relatorioAcervoDisponivel();
 void relatorioHistoricoUsuario();

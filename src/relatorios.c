@@ -146,6 +146,19 @@ void relatorioLivrosMaisEmprestados()
     aguardarTecla(rodape);
 }
 
+static int diasAtraso(const char *previsto, const char *hoje)
+{
+    int dp, mp, ap, dh, mh, ah;
+    sscanf(previsto, "%d/%d/%d", &dp, &mp, &ap);
+    sscanf(hoje, "%d/%d/%d", &dh, &mh, &ah);
+
+    // Converte ambas as datas para "dias totais" usando fórmula simples
+    long dias_prev = ap * 365L + mp * 30L + dp;
+    long dias_hoje = ah * 365L + mh * 30L + dh;
+
+    return (int)(dias_hoje - dias_prev);
+}
+
 /*
    RELATÓRIO 2: EMPRÉSTIMOS EM ATRASO
 
@@ -157,37 +170,30 @@ void relatorioEmprestimosAtraso()
 {
     cabecalhoTela("RELATORIO: EMPRESTIMOS EM ATRASO");
 
-    /* Obtém a data atual do sistema para comparação */
     char hoje[11];
     pegar_data_hoje(hoje);
 
     gotoxy(2, 5);
     printf("Data de referencia: %s", hoje);
 
-    /* Exibe cabeçalho da tabela com colunas de informações */
     const int COL = 2, Y0 = 7;
     gotoxy(COL, Y0);
-    printf("%-4s %-8s %-25s %-30s %-11s %-11s",
-           "ID", "MAT.", "USUARIO", "LIVRO", "RETIRADA", "PREVISTO");
-    linha(Y0 + 1, 98);
+    printf("%-4s %-8s %-25s %-30s %s",
+           "ID", "MAT.", "USUARIO", "LIVRO", "ATRASO");
+    linha(Y0 + 1, 75);
 
-    /* Abre arquivo para armazenar o relatório */
     FILE *arq = abrirArquivoRelatorio("emprestimos_em_atraso.txt");
     if (arq)
-        fprintf(arq, "Data de referencia: %s\n\n%-4s %-8s %-25s %-30s %-11s %-11s\n%-*s\n",
-                hoje, "ID", "MAT.", "USUARIO", "LIVRO", "RETIRADA", "PREVISTO", 98, "");
+        fprintf(arq, "Data de referencia: %s\n\n%-4s %-8s %-25s %-30s %s\n%-*s\n",
+                hoje, "ID", "MAT.", "USUARIO", "LIVRO", "ATRASO", 75, "");
 
-    /* Percorre todos os empréstimos procurando por atrasos */
     int achou = 0, linha_atual = Y0 + 2;
     for (int i = 0; i < totalEmprestimos; i++)
     {
         Emprestimo *e = &emprestimos[i];
-
-        /* Ignora empréstimos já devolvidos ou que ainda estão dentro do prazo */
         if (e->devolvido != 0 || comp_data(e->data_prevista, hoje) != -1)
             continue;
 
-        /* Busca o usuário e o livro associados ao empréstimo */
         Usuario *u = NULL;
         Livro *l = NULL;
         for (int j = 0; j < totalUsuarios; j++)
@@ -203,29 +209,29 @@ void relatorioEmprestimosAtraso()
                 break;
             }
 
-        /* Exibe informações do empréstimo em atraso na tela */
+        int dias = diasAtraso(e->data_prevista, hoje);
+        char atraso_str[20];
+        snprintf(atraso_str, sizeof(atraso_str), "%d dia%s", dias, dias == 1 ? "" : "s");
+
         gotoxy(COL, linha_atual);
-        printf("%-4d %-8s %-25.25s %-30.30s %-11s %-11s",
+        printf("%-4d %-8s %-25.25s %-30.30s %s",
                e->id,
                e->matricula_usuario,
                u ? u->nome : "(removido)",
                l ? l->titulo : "(removido)",
-               e->data_retirada,
-               e->data_prevista);
+               atraso_str);
 
-        /* Escreve no arquivo também */
         if (arq)
-            fprintf(arq, "%-4d %-8s %-25.25s %-30.30s %-11s %-11s\n",
+            fprintf(arq, "%-4d %-8s %-25.25s %-30.30s %s\n",
                     e->id, e->matricula_usuario,
                     u ? u->nome : "(removido)",
                     l ? l->titulo : "(removido)",
-                    e->data_retirada, e->data_prevista);
+                    atraso_str);
 
         linha_atual++;
         achou = 1;
     }
 
-    /* Se não houver empréstimos em atraso, exibe mensagem correspondente */
     if (!achou)
     {
         gotoxy(COL, linha_atual);
@@ -235,7 +241,6 @@ void relatorioEmprestimosAtraso()
         linha_atual++;
     }
 
-    /* Fecha o arquivo (não exibe caminho de salvamento) */
     linha_atual++;
     if (arq)
     {

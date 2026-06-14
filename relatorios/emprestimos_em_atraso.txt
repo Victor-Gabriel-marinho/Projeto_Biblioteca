@@ -1,5 +1,5 @@
 Data de referencia: 14/06/2026
 
-ID   MAT.     USUARIO                   LIVRO                          RETIRADA    PREVISTO   
-                                                                                                  
-3    8670429  Pedro                     Memorias Postumulas do Brainro 28/05/2026  12/06/2026 
+ID   MAT.     USUARIO                   LIVRO                          ATRASO
+                                                                           
+3    8670429  Pedro                     Memorias Postumulas do Brainro 2 dias
