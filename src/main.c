@@ -11,15 +11,13 @@
 #include "../include/persistencia.h"
 #include "../include/emprestimos.h"
 
-
-
 Banco db;
 Usuario *usuarios = NULL;
 int totalUsuarios = 0;
 int totalEmprestimos = 0;
 Emprestimo *emprestimos = NULL;
 int totalLivros = 0;
-Livro *livros = NULL;   
+Livro *livros = NULL;
 
 int main()
 {
@@ -53,9 +51,9 @@ int main()
         {
             regDev();
         }
-        else if (posicaoAtual == 3)
+        else if (posicaoAtual == 4)
         {
-            printf("relatorios\n");
+            Relatorios();
         }
         else if (posicaoAtual == 5)
         {
