@@ -25,12 +25,11 @@ void listEmp_user(char matricula[8], Usuario *pessoa) // Listar o emprestimos de
         { 
             if (emprestimos[i].devolvido == 0)
             {
-                printf("%d: \nID: %d\nData do emprestimo: %s\nData prevista de devolucao: %s\n", c, emprestimos[i].id, emprestimos[i].data_retirada, emprestimos[i].data_prevista);
+                printf("ID: %d\nData do emprestimo: %s\nData prevista de devolucao: %s\n", emprestimos[i].id, emprestimos[i].data_retirada, emprestimos[i].data_prevista);
                 pegar_data_hoje(today); // pega a data de hoje para avisar caso esteja atrasado
                 if(comp_data(emprestimos[i].data_prevista, today) == -1){
                     printf("O emprestimo está atrasado!");
                 }
-                c++;
             }
         }
     }
