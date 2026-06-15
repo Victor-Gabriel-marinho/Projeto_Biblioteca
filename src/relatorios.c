@@ -391,13 +391,18 @@ void relatorioHistoricoUsuario()
     {
         /* Exibe cabeçalho da tabela de empréstimos */
         gotoxy(COL, y);
-        printf("%-5s %-34s %-10s %-10s %-10s %s",
+        printf("\n%-5s %-34s %-10s %-10s %-10s %-10s\n",
                "ID", "LIVRO", "RETIRADA", "PREVISTO", "DEVOLVIDO", "STATUS");
-        linha(y + 1, 90);
+        y++;
+
+        gotoxy(COL, y);
+        for (int i = 0; i < 90; i++)
+            printf("-");
+        y++;
+
         if (arq)
-            fprintf(arq, "%-5s %-34s %-10s %-10s %-10s %s\n%-*s\n",
+            fprintf(arq, "\n%-5s %-34s %-10s %-10s %-10s %-10s\n%-*s\n",
                     "ID", "LIVRO", "RETIRADA", "PREVISTO", "DEVOLVIDO", "STATUS", 90, "");
-        y += 2;
 
         /* Obtém a data de referência (hoje) para verificar atrasos */
         char hoje[11];
@@ -428,7 +433,7 @@ void relatorioHistoricoUsuario()
 
             /* Exibe informações do empréstimo na tela */
             gotoxy(COL, y);
-            printf("%-5d %-34.34s %-10s %-10s %-10s %s",
+            printf("\n%-5d %-34.34s %-10s %-10s %-10s %-10s\n",
                    e->id,
                    l ? l->titulo : "(removido)",
                    e->data_retirada,
@@ -438,7 +443,8 @@ void relatorioHistoricoUsuario()
 
             /* Escreve a mesma linha no arquivo */
             if (arq)
-                fprintf(arq, "%-5d %-34.34s %-10s %-10s %-10s %s\n",
+
+                fprintf(arq, "\n%-5d %-34.34s %-10s %-10s %-10s %-10s\n",
                         e->id,
                         l ? l->titulo : "(removido)",
                         e->data_retirada,
