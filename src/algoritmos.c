@@ -266,14 +266,16 @@ int PegarIndiceLivro(char codigo[8])
         return 0;
 }
 
+
+
 static void merge_livros(Livro *vet, Livro *tmp, int esq, int meio, int dir)
 {
     int i = esq, j = meio + 1, k = esq;
 
-    // Mescla as duas metades ordenadas em um vetor temporário
     while (i <= meio && j <= dir)
     {
-        if (vet[i].total_emprestimos >= vet[j].total_emprestimos)
+        // Alterado de >= para <= para ordenar de forma crescente
+        if (vet[i].total_emprestimos <= vet[j].total_emprestimos)
             tmp[k++] = vet[i++];
         else
             tmp[k++] = vet[j++];
@@ -391,4 +393,27 @@ void merge_sort_emprestimos_data(Emprestimo *vet, int n)
     // Ordena os empréstimos por data de retirada
     merge_sort_emp_rec(vet, tmp, 0, n - 1);
 }
+void exibir_livros_mais_emprestados()
+{
+    int n = db.num_livros;
 
+    if (n < 0)
+    {
+        printf("Nenhum livro cadastrado.\n");
+        return;
+    }
+
+    Livro saida[MAX_LIVROS];
+
+    // Ordena os livros por total_emprestimos (decrescente)
+    merge_sort_livros(saida, n);
+
+    // Exibe o resultado
+    for (int i = 0; i < n; i++)
+    {
+        printf("%d. %s — %d empréstimos\n",
+               i + 1,
+               saida[i].titulo,
+               saida[i].total_emprestimos);
+    }
+}

@@ -177,6 +177,8 @@ void listLivros()
         // Quantidade disponível
             printf("Disp. : %-50d", livros[i].qtd_disponivel);
         printf("\n\n");
+
+        exibir_livros_mais_emprestados();
     }
 
     system("pause");

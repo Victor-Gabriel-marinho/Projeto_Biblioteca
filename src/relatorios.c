@@ -17,7 +17,6 @@
 #include "../include/livros.h"
 #include "../include/emprestimos.h"
 #include "../include/relatorios.h"
-
 /*
    FUNÇÕES AUXILIARES INTERNAS (Helpers)
 
