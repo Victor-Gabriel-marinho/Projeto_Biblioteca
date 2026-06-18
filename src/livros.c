@@ -425,9 +425,14 @@ void EditarLivro()
     printf("ou pressione Enter para manter o anterior\n");
     scanf("%d", &livroEditado.qtd_total);
     getchar();
+    livroEditado.qtd_disponivel = livroEncontrado.qtd_total - livroEncontrado.qtd_disponivel;
     if (livroEditado.qtd_total < livroEncontrado.qtd_disponivel)
     {
-        livroEditado.qtd_disponivel = livroEditado.qtd_total;
+        printf("\nQuantidade total não pode ser menor que a quantidade de exemplares emprestados!\n");
+        printf("Pressione qualquer tecla para voltar\n");
+        _getch();
+        system("cls");
+        return;
     }
     if (strcmp(livroEditado.titulo, "") == 0 || strcmp(livroEditado.titulo, " ") == 0)
     {
