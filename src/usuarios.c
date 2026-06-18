@@ -147,6 +147,12 @@ void RemoverUsuario()
         return;
     }
 
+    if (usuarioEncontrado.qtd_emprestimos_ativos != 0) {
+        printf("Não é possível remover um usuário com emprestimo ativo!\n");
+        system("pause");
+        return;
+    }
+
 
     printf("\nUsuário encontrado:\n");
     printf("Matrícula: %s\n", usuarioEncontrado.matricula);
