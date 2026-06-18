@@ -1,0 +1,14 @@
+Usuario: Pedro (Mat. 9228031) | Curso: CC
+Total de emprestimos: 4
+
+
+ID    LIVRO                              RETIRADA   PREVISTO   DEVOLVIDO  STATUS    
+                                                                                          
+
+4     BrainRot e seus amigos             29/05/2026 13/06/2026 -          ATRASADO  
+
+3     BrainRot e seus amigos             03/06/2026 17/06/2026 -          EM ABERTO 
+
+1     BrainRot e seus amigos             12/06/2026 26/06/2026 17/06/2026 DEVOLVIDO 
+
+2     BrainRot e seus amigos             12/06/2026 26/06/2026 -          EM ABERTO 

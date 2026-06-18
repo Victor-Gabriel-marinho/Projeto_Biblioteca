@@ -1,0 +1,5 @@
+Data de referencia: 17/06/2026
+
+ID   MAT.     USUARIO                   LIVRO                          ATRASO
+                                                                           
+4    9228031  Pedro                     BrainRot e seus amigos         4 dias

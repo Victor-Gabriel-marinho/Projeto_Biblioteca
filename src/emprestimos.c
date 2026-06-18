@@ -14,10 +14,10 @@
 
 void listEmp_user(char matricula[8], Usuario *pessoa) // Listar o emprestimos de um usuario
 {
-    int c = 1;
+
     char today[11];
     BuscarUsuarioPorMat(pessoa, matricula); // Pegar o nome do usuario pela matricula
-    printf("Emprestimos de %s: \n", pessoa->nome);
+    printf("MOSTRANDO EMPRESTIMOS DE: %s \n", pessoa->nome);
     for (int i = 0; i < totalEmprestimos; i++) // Percorre o vetor de emprestimos que sempre tem tamanho de totalEmprestimos
     {
         if (emprestimos[i].devolvido == 0 && strcmp(emprestimos[i].matricula_usuario, matricula) == 0) // Checa se a matricula registrada no emprestimo é a mesma que a matricula do aluno. Alem disso, checa se devolvido é igual a 0 para o emprestimo ainda estar aberto.
@@ -28,7 +28,7 @@ void listEmp_user(char matricula[8], Usuario *pessoa) // Listar o emprestimos de
                 pegar_data_hoje(today); // pega a data de hoje para avisar caso esteja atrasado
                 if (comp_data(emprestimos[i].data_prevista, today) == -1)
                 {
-                    printf("O emprestimo está atrasado!");
+                    printf("O emprestimo está atrasado!\n");
                 }
             }
         }
@@ -84,8 +84,6 @@ void regisEmp(Usuario *pessoa, Livro *livro, char data[11])
     emprestimos[totalEmprestimos] = novo; // enviando a nova struct para a ultima posicao do vetor de emprestimos
     totalEmprestimos++;
 
-    printf("%d", totalEmprestimos);
-    system("pause");
 
     SalvarEmprestimos(emprestimos, totalEmprestimos); // salvando os emprestimos
 
@@ -139,7 +137,7 @@ void regDev()
                 listEmp_user(matricula_aluno, &pessoa);
                 scanf("%d", &remover);
 
-                if (validEmp_user(remover - 1, matricula_aluno, &posicao_emprestimo) == 1) // o valid emp user serve para pegar a posicao do emprestimo selecionado pelo usuario
+                if (validEmp_user(remover - 1, matricula_aluno, &posicao_emprestimo) == 1 && emprestimos[posicao_emprestimo].devolvido == 0) // o valid emp user serve para pegar a posicao do emprestimo selecionado pelo usuario
                 {
                     char codigo_temp[8];
                     strcpy(codigo_temp, emprestimos[posicao_emprestimo].codigo_livro); // pegar o codigo do livro para acessar ele
@@ -158,6 +156,7 @@ void regDev()
                     SalvarLivros(livros, totalLivros);
                     SalvarEmprestimos(emprestimos, totalEmprestimos); // Salvando alterações dos vetores
                     printf("Devolucao registrada com sucesso!");
+                    system("pause");
                     return;
                 }
                 if (validEmp_user(remover, matricula_aluno, &posicao_emprestimo) == 0)
