@@ -17,16 +17,22 @@ int comp_data(char data1[11], char data2[11]) // Funçao para comparar duas data
     sscanf(data2, "%d/%d/%d", &d2, &m2, &a2);
 
     // compara ano
-    if (a1 > a2) return 1;
-    if (a1 < a2) return -1;
+    if (a1 > a2)
+        return 1;
+    if (a1 < a2)
+        return -1;
 
     // compara mês
-    if (m1 > m2) return 1;
-    if (m1 < m2) return -1;
+    if (m1 > m2)
+        return 1;
+    if (m1 < m2)
+        return -1;
 
     // compara dia
-    if (d1 > d2) return 1;
-    if (d1 < d2) return -1;
+    if (d1 > d2)
+        return 1;
+    if (d1 < d2)
+        return -1;
 
     return 0;
 }
@@ -110,7 +116,6 @@ void ler_data(char data[])
     }
 }
 
-
 // Função para gerar matricula automaticamente
 void gerarID(char *buffer)
 {
@@ -190,11 +195,8 @@ int BuscarLivroPorTitulo(Livro *livroEncontrado, char titulo[MAX_STRING])
         }
     }
 
-
-        return 0;
-    
+    return 0;
 }
-
 
 // Busca um usuário pelo nome e copia os dados para usuarioEncontrado.
 // Se o nome não for encontrado, exibe mensagem de erro.
@@ -209,7 +211,7 @@ int BuscarUsuarioPorNome(Usuario *usuarioEncontrado, char nome[8])
     {
         strcpy(temp, usuarios[i].nome);
 
-        for (int j = 0; temp[j] != '\0'; j++) 
+        for (int j = 0; temp[j] != '\0'; j++)
             temp[j] = tolower(temp[j]);
 
         if (strcmp(nome, temp) == 0)
@@ -236,7 +238,7 @@ int BuscarUsuarioPorMat(Usuario *usuarioEncontrado, char matricula[8])
         }
     }
 
-        return 0;
+    return 0;
 }
 int PegarIndiceUsuario(char matricula[8])
 {
@@ -249,7 +251,7 @@ int PegarIndiceUsuario(char matricula[8])
         }
     }
 
-        return 0;
+    return 0;
 }
 
 int PegarIndiceLivro(char codigo[8])
@@ -263,10 +265,8 @@ int PegarIndiceLivro(char codigo[8])
         }
     }
 
-        return 0;
+    return 0;
 }
-
-
 
 static void merge_livros(Livro *vet, Livro *tmp, int esq, int meio, int dir)
 {
@@ -274,22 +274,20 @@ static void merge_livros(Livro *vet, Livro *tmp, int esq, int meio, int dir)
 
     while (i <= meio && j <= dir)
     {
-        // Alterado de >= para <= para ordenar de forma crescente
-        if (vet[i].total_emprestimos <= vet[j].total_emprestimos)
+        // Ordena decrescente: mais emprestados primeiro
+        // Empate em 0 empréstimos: mantém ordem original (estável)
+        if (vet[i].total_emprestimos >= vet[j].total_emprestimos)
             tmp[k++] = vet[i++];
         else
             tmp[k++] = vet[j++];
     }
 
-    // Copia os elementos restantes da metade esquerda, se houver
     while (i <= meio)
         tmp[k++] = vet[i++];
 
-    // Copia os elementos restantes da metade direita, se houver
     while (j <= dir)
         tmp[k++] = vet[j++];
 
-    // Copia o segmento mesclado de volta para o vetor original
     for (i = esq; i <= dir; i++)
         vet[i] = tmp[i];
 }
@@ -318,7 +316,7 @@ void merge_sort_livros(Livro *saida, int n)
         return;
 
     // Copia os livros do banco para o vetor de saída
-    memcpy(saida, db.livros, n * sizeof(Livro));
+    memcpy(saida, livros, n * sizeof(Livro));
 
     Livro tmp[MAX_LIVROS];
 
@@ -395,9 +393,9 @@ void merge_sort_emprestimos_data(Emprestimo *vet, int n)
 }
 void exibir_livros_mais_emprestados()
 {
-    int n = db.num_livros;
+    int n = totalLivros; // ← era db.num_livros
 
-    if (n < 0)
+    if (n <= 0) // ← era n < 0
     {
         printf("Nenhum livro cadastrado.\n");
         return;
@@ -405,13 +403,11 @@ void exibir_livros_mais_emprestados()
 
     Livro saida[MAX_LIVROS];
 
-    // Ordena os livros por total_emprestimos (decrescente)
     merge_sort_livros(saida, n);
 
-    // Exibe o resultado
     for (int i = 0; i < n; i++)
     {
-        printf("%d. %s — %d empréstimos\n",
+        printf("%d. %s — %d emprestimos\n",
                i + 1,
                saida[i].titulo,
                saida[i].total_emprestimos);

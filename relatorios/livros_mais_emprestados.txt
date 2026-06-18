@@ -1,3 +1,0 @@
-POS  CODIGO  TITULO                              AUTOR                     EMP.
-                                                                                
-1                                                                          0

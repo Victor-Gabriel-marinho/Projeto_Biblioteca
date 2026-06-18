@@ -14,13 +14,13 @@ void AddLivros()
 {
     srand(time(NULL));
     char tecla;
-    Livro novoLivro;
+    Livro novoLivro = {0};
 
     gerarID(novoLivro.codigo);
     novoLivro.qtd_disponivel = 0;
 
     printf("=== ADICIONAR LIVRO ===\n\n");
-    mostrarCursor(); 
+    mostrarCursor();
 
     do
     {
@@ -44,12 +44,12 @@ void AddLivros()
         }
     } while (strlen(novoLivro.autor) == 0 || strcmp(novoLivro.autor, " ") == 0);
 
- do
+    do
     {
         printf("Digite o gênero do livro: ");
         fgets(novoLivro.genero, MAX_STRING, stdin);
         novoLivro.genero[strcspn(novoLivro.genero, "\n")] = '\0';
-        
+
         if (strlen(novoLivro.genero) == 0)
         {
             printf("Gênero inválido! Tente novamente.\n");
@@ -63,7 +63,7 @@ void AddLivros()
         do
         {
             printf("Digite o ano do livro: ");
-            scanf("%d", &novoLivro.ano);  
+            scanf("%d", &novoLivro.ano);
             if (novoLivro.ano == 0)
             {
                 printf("Ano inválido! Tente novamente.\n");
@@ -75,14 +75,14 @@ void AddLivros()
         } while (!ano_valido && getchar() != '\n');
     }
 
-    {   
+    {
         int qtd_total = 0;
         int qtd_valida = 0;
 
         do
         {
             printf("Digite a quantidade total de exemplares do livro: ");
-            scanf("%d", &novoLivro.qtd_total);   
+            scanf("%d", &novoLivro.qtd_total);
             if (novoLivro.qtd_total == 0)
             {
                 printf("Quantidade inválida! Tente novamente.\n");
@@ -115,7 +115,7 @@ void AddLivros()
         }
         else if (tecla == 13)
         {
-           
+
             Livro *temp = realloc(livros, (totalLivros + 1) * sizeof(Livro));
             if (temp == NULL)
             {
@@ -128,7 +128,7 @@ void AddLivros()
             livros[totalLivros] = novoLivro;
             totalLivros++;
 
-            SalvarLivros(livros, totalLivros);   
+            SalvarLivros(livros, totalLivros);
             printf("\nLivro salvo com sucesso!\nPressione qualquer tecla para sair\n");
             _getch();
             system("cls");
@@ -147,44 +147,42 @@ void listLivros()
             colunas = 1;
 
         // Cabeçalho
-            printf("=== Livro %d ===\t\t", i + 1);
+        printf("=== Livro %d ===\t\t", i + 1);
         printf("\n");
 
         // Código
-            printf("Codigo: %-40.40s", livros[i].codigo);
+        printf("Codigo: %-40.40s", livros[i].codigo);
         printf("\n");
 
         // Título
-            printf("Titulo: %-50.50s", livros[i].titulo);
+        printf("Titulo: %-50.50s", livros[i].titulo);
         printf("\n");
 
         // Autor
-            printf("Autor : %-50.50s", livros[i].autor);
+        printf("Autor : %-50.50s", livros[i].autor);
         printf("\n");
 
         // Ano
-            printf("Ano   : %-40d", livros[i].ano);
+        printf("Ano   : %-40d", livros[i].ano);
         printf("\n");
 
         // Gênero
-            printf("Genero: %-50.50s", livros[i].genero);
+        printf("Genero: %-50.50s", livros[i].genero);
         printf("\n");
 
         // Quantidade total
-            printf("Total : %-50d", livros[i].qtd_total);
+        printf("Total : %-50d", livros[i].qtd_total);
         printf("\n");
 
         // Quantidade disponível
-            printf("Disp. : %-50d", livros[i].qtd_disponivel);
+        printf("Disp. : %-50d", livros[i].qtd_disponivel);
         printf("\n\n");
-
-        exibir_livros_mais_emprestados();
     }
-
+    exibir_livros_mais_emprestados();
     system("pause");
 }
 
- void RemoverLivro()
+void RemoverLivro()
 {
     char cod[8];
     char tecla;
@@ -299,12 +297,12 @@ void BuscarLivro()
             titulo[strcspn(titulo, "\n")] = '\0';
 
             result = BuscarLivroPorTitulo(&livroEncontrado, titulo);
-          if (result == 0)
-        {
-            printf("Livro não encontrado!\n");
-            _getch();
-            continue;
-           }
+            if (result == 0)
+            {
+                printf("Livro não encontrado!\n");
+                _getch();
+                continue;
+            }
 
             printf("=== Livro ===\n");
             printf("Código : %s\n", livroEncontrado.codigo);
@@ -312,9 +310,8 @@ void BuscarLivro()
             printf("Autor  : %s\n", livroEncontrado.autor);
             printf("Gênero : %s\n", livroEncontrado.genero);
             printf("Ano    : %d\n", livroEncontrado.ano);
-         printf("Disponível: %d\n", livroEncontrado.qtd_disponivel);
-         printf("Acervo total: %d\n", livroEncontrado.qtd_total);
-        
+            printf("Disponível: %d\n", livroEncontrado.qtd_disponivel);
+            printf("Acervo total: %d\n", livroEncontrado.qtd_total);
 
             printf("Digite qualquer tecla para voltar\n");
             _getch();
@@ -334,12 +331,12 @@ void BuscarLivro()
             codigo[strcspn(codigo, "\n")] = '\0';
 
             result = busca_livroCodigo(&livroEncontrado, codigo);
-           if (result == 0)
-           {
-            printf("Livro não encontrado!\n");
-            _getch();
-            continue;
-        }
+            if (result == 0)
+            {
+                printf("Livro não encontrado!\n");
+                _getch();
+                continue;
+            }
 
             printf("=== Livro ===\n");
             printf("Código : %s\n", livroEncontrado.codigo);
@@ -428,10 +425,10 @@ void EditarLivro()
     printf("ou pressione Enter para manter o anterior\n");
     scanf("%d", &livroEditado.qtd_total);
     getchar();
-    if( livroEditado.qtd_total<livroEncontrado.qtd_disponivel) 
+    if (livroEditado.qtd_total < livroEncontrado.qtd_disponivel)
     {
         livroEditado.qtd_disponivel = livroEditado.qtd_total;
-     }
+    }
     if (strcmp(livroEditado.titulo, "") == 0 || strcmp(livroEditado.titulo, " ") == 0)
     {
         strcpy(livroEditado.titulo, livroEncontrado.titulo);
@@ -440,11 +437,10 @@ void EditarLivro()
     {
         strcpy(livroEditado.autor, livroEncontrado.autor);
     }
-     if (strcmp(livroEditado.genero, "") == 0 || strcmp(livroEditado.genero, " ") == 0)
+    if (strcmp(livroEditado.genero, "") == 0 || strcmp(livroEditado.genero, " ") == 0)
     {
         strcpy(livroEditado.genero, livroEncontrado.genero);
     }
-    
 
     for (int i = 0; i < totalLivros; i++)
     {
@@ -475,13 +471,12 @@ void Livros()
         if (posicaoAtual == 0)
         {
             // Função de adicionar livros
-           AddLivros(); 
+            AddLivros();
         }
         else if (posicaoAtual == 1)
         {
             // Função de listar livros
             listLivros();
-            
         }
         else if (posicaoAtual == 2)
         {
