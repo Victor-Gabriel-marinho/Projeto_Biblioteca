@@ -102,7 +102,7 @@ void AddLivros()
         printf("Código    : %s\n", novoLivro.codigo);
         printf("Título    : %s\n", novoLivro.titulo);
         printf("Autor     : %s\n", novoLivro.autor);
-        printf("Ano       : %zu\n", novoLivro.ano);
+        printf("Ano       : %d\n", novoLivro.ano);
         printf("Gênero    : %s\n", novoLivro.genero);
         printf("Disponível: %d\n\n", novoLivro.qtd_total);
         printf("Pressione Enter para confirmar ou BackSpace para voltar");
@@ -433,6 +433,8 @@ void EditarLivro()
         _getch();
         system("cls");
         return;
+    } else {
+        livroEditado.qtd_disponivel = livroEditado.qtd_total - (livroEncontrado.qtd_total - livroEncontrado.qtd_disponivel);
     }
     if (strcmp(livroEditado.titulo, "") == 0 || strcmp(livroEditado.titulo, " ") == 0)
     {
