@@ -161,7 +161,7 @@ void regDev()
                 }
                 if (validEmp_user(remover, matricula_aluno, &posicao_emprestimo) == 0 || emprestimos[posicao_emprestimo].devolvido == 1)
                 {
-                    printf("O emprestimo selecionado não existe ou não pertence ao usuario selecionado ou ja foi devolvido!"); // caso o usuario digite uma opção que nao condiz com um dos emprestimos mostrados
+                    printf("O emprestimo selecionado não existe ou não pertence ao usuario selecionado ou ja foi devolvido!\n"); // caso o usuario digite uma opção que nao condiz com um dos emprestimos mostrados
                     continue;
                 }
             }
